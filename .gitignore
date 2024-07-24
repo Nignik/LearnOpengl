@@ -1,0 +1,7 @@
+*.sln
+.vs/
+OpenGarlicEngine/bin/
+OpenGarlicEngine/obj/
+*.vcxproj.filters
+*.vcxproj.user
+*.vcxproj
