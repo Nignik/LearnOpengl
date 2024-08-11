@@ -1,22 +1,12 @@
 project "OpenGarlicEngine"
-    kind "ConsoleApp"
-    targetdir "bin/%{cfg.buildcfg}"
+    kind "StaticLib"
     cppdialect "c++20"
 
     files { 
-        "**.h", "**.cpp",
+        "src/**.h", "src/**.cpp",
+        "imgui/**.h", "imgui/**.cpp",
         "%{wks.location}/external/glad/src/**.c",
     }
-
-    function copyShaders()
-        local sourceDir = path.join(os.getcwd(), "shaders")
-        local destDir = path.join(targetdir(), "shaders")
-        os.mkdir(destDir)
-        os.execute('xcopy /s /y "' .. sourceDir .. '" "' .. destDir .. '"')
-    end
-
-    -- Pre-build step to copy shaders
-    prebuildcommands { copyShaders() }
 
     includedirs {
         "%{wks.location}/external/glad/include",
@@ -26,12 +16,11 @@ project "OpenGarlicEngine"
         "%{wks.location}/external/imgui/backends"
     }
 
-    libdirs {
-        "%{wks.location}/external/glfw/lib-vc2022",
+    prebuildcommands {
+        "echo %{wks.location}/OpenGarlicEngine/shaders",
+        "echo %{cfg.targetdir}/bin/Debug/shaders",
+        "{COPYDIR} %{wks.location}/OpenGarlicEngine/shaders %{cfg.targetdir}/bin/Debug/shaders"
     }
-
-    links {"glfw3", "opengl32"}
-
 
     filter "configurations:Debug"
         defines { "DEBUG" }
