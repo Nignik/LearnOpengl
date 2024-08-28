@@ -15,10 +15,10 @@ Line::Line(std::vector<float>& vertices, glm::vec3 position)
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
-	model = glm::mat4(1.0f);
+	model = mat4(1.0f);
 }
 
-void Line::Update(glm::vec3 start, glm::vec3 end)
+void Line::Update(vec3 start, vec3 end)
 {
 	std::vector<float> newVertices = {
 		start.x, start.y, start.z,
@@ -30,12 +30,12 @@ void Line::Update(glm::vec3 start, glm::vec3 end)
 	glBufferData(GL_ARRAY_BUFFER, newVertices.size() * sizeof(float), newVertices.data(), GL_STATIC_DRAW);
 }
 
-void Line::Draw(glm::mat4& projection, glm::mat4& view)
+void Line::Draw(mat4& projection, mat4& view)
 {
-	shader.use();
-	shader.setMat4("model", model);
-	shader.setMat4("view", view);
-	shader.setMat4("projection", projection);
+	shader.Use();
+	shader.SetMat4("model", model);
+	shader.SetMat4("view", view);
+	shader.SetMat4("projection", projection);
 
 	glBindVertexArray(VAO);
 	glDrawArrays(GL_LINES, 0, 2);

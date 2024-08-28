@@ -41,7 +41,7 @@ TextureBox::~TextureBox()
 void TextureBox::Draw()
 {
 	glBindTexture(GL_TEXTURE_2D, m_TextureId);
-	m_Shader.use();
+	m_Shader.Use();
 	glBindVertexArray(m_VAO);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }

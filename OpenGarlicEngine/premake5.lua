@@ -13,21 +13,18 @@ project "OpenGarlicEngine"
         "%{wks.location}/external/glfw/include",
         "%{wks.location}/external/glm",
         "%{wks.location}/external/imgui",
-        "%{wks.location}/external/imgui/backends"
+        "%{wks.location}/external/imgui/backends",
+        "%{wks.location}/external/assimp/include"
     }
 
-    prebuildcommands {
-        "echo %{wks.location}/OpenGarlicEngine/shaders",
-        "echo %{cfg.targetdir}/bin/Debug/shaders",
-        "{COPYDIR} %{wks.location}/OpenGarlicEngine/shaders %{cfg.targetdir}/bin/Debug/shaders"
+    libdirs {
+        "%{wks.location}/external/glfw/lib-vc2022",
+        "%{wks.location}/external/assimp/lib/x64"
     }
 
-    filter "configurations:Debug"
-        defines { "DEBUG" }
-        symbols "On"
-        runtime "Debug"
-  
-    filter "configurations:Release"
-        defines { "NDEBUG" }
-        optimize "On"
-        runtime "Release"
+    links {"glfw3", "opengl32", "assimp-vc143-mt"}
+
+    --prebuildcommands {
+    --    "{COPYDIR} %{wks.location}/OpenGarlicEngine/shaders %{cfg.targetdir}/bin/Debug/shaders",
+    --    "{COPYDIR} %{wks.location}/external/assimp/bin/x64 %{cfg.targetdir}/bin/Debug"
+    --}

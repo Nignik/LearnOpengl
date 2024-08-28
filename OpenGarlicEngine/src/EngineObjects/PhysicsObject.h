@@ -1,30 +1,53 @@
 #pragma once
 
 #include <glm.hpp>
+#define GLM_ENABLE_EXPERIMENTAL
+#include <gtx/transform.hpp>
 #include <vector>
 
-#include "Drawable.h"
-#include "../Shader/ShaderStructs.h"
-#include "../Shader/shader_m.h"
-#include "../Vertex.h"
+#include "../Shader.h"
+#include "../Mesh.h"
+#include "../Transform.h"
+#include "../Collider.h"
+#include "../Model.h"
 
 using glm::vec3;
 using glm::mat4;
 
-class PhysicsObject : public Drawable
+class PhysicsObject
 {
 public:
-	PhysicsObject(Material material, vec3 position, GLuint VBO, GLuint VAO, GLuint EBO, size_t indicesCount, Shader& shader, float mass, vec3 velocity);
 
-	void Draw(mat4& projection, mat4& view, vec3& cameraPosition,const Light& light) override;
+	template<typename ColliderType>
+	PhysicsObject(Model& model, std::shared_ptr<Transform> transform, ColliderType&& collider, unsigned int id, vec3 velocity, float mass)
+		: m_Model(model),
+		m_Transform(transform),
+		m_Collider(collider),
+		m_Id(id),
+		m_Mass(mass),
+		m_Velocity(velocity)
+	{
+	}
 
+	void Draw(Shader& shader);
+	void Move(float deltaTime, std::vector<PhysicsObject>& otherObjects);
+
+	bool IsColliding(PhysicsObject& other);
+
+	Collider GetCollider();
 	vec3 GetVelocity();
 	void SetVelocity(vec3 newVelocity);
 	vec3 GetPosition();
 	void SetPosition(vec3 newPosition);
+	std::shared_ptr<Transform> GetSharedTransform();
+	unsigned int GetId();
 
 private:
-	Material m_Material;
+	unsigned int m_Id;
+
+	Model m_Model;
+	std::shared_ptr<Transform> m_Transform;
+	Collider m_Collider;
 
 	vec3 m_Velocity;
 	float m_Mass;

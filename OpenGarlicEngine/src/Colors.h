@@ -8,12 +8,14 @@
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
 
+using glm::vec3;
+
 namespace Color
 {
-	constexpr glm::vec3 RED = glm::vec3(1.0f, 0.0f, 0.0f);
-	constexpr glm::vec3 YELLOW = glm::vec3(0.8f, 0.8f, 0.0f);
-	constexpr glm::vec3 GREEN = glm::vec3(0.0f, 0.85f, 0.0f);
-	constexpr glm::vec3 CYAN = glm::vec3(0.0f, 0.85f, 0.85f);
-	constexpr glm::vec3 BLUE = glm::vec3(0.0f, 0.0f, 1.0f);
-	constexpr glm::vec3 PINK = glm::vec3(0.8f, 0.0f, 0.5f);
+	constexpr vec3 RED = vec3(1.0f, 0.0f, 0.0f);
+	constexpr vec3 YELLOW = vec3(0.8f, 0.8f, 0.0f);
+	constexpr vec3 GREEN = vec3(0.0f, 0.85f, 0.0f);
+	constexpr vec3 CYAN = vec3(0.0f, 0.85f, 0.85f);
+	constexpr vec3 BLUE = vec3(0.0f, 0.0f, 1.0f);
+	constexpr vec3 PINK = vec3(0.8f, 0.0f, 0.5f);
 }

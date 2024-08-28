@@ -8,6 +8,9 @@
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
 
+#include "Camera/Camera.h"
+#include "Controller.h"
+
 #include <vector>
 #include <string>
 #include <functional>
@@ -34,6 +37,7 @@ public:
 	~NoodleGui();
 
 	void RenderFrame();
+	void ShowControllerSettings(std::weak_ptr<Controller> controller);
 	void AddButton(Butt&& newButton);
 
 	void AddSlider(FloatSlider&& newSlider);

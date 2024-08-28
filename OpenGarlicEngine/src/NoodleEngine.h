@@ -15,17 +15,23 @@
 #include "InputHandler.h"
 #include "EngineObjects/Line.h"
 #include "NoodleGui.h"
+#include "stb_image.h"
+#include "Controller.h"
 
 #include <imgui.h>
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
 
+using glm::vec2, glm::vec3;
+using glm::mat4;
+
+
 struct FrameData
 {
 	float deltaTime;
-	glm::mat4 projection;
-	glm::mat4 view;
-	glm::vec3 position;
+	mat4 projection;
+	mat4 view;
+	vec3 position;
 };
 
 constexpr unsigned int SCR_WIDTH = 1200;
@@ -42,13 +48,16 @@ public:
 	bool IsRunning();
 
 	FrameData GetFrameData();
+	vec2 GetResolution();
 	GLFWwindow* GetWindow();
+	std::shared_ptr<Camera> GetCamera();
+	std::shared_ptr<Controller> GetController();
 	
 
 private:
 	GLFWwindow* m_Window;
 	std::shared_ptr<Camera> m_Camera;
-	CameraController* m_CameraController;
+	std::shared_ptr<Controller> m_Controller;
 	float m_DeltaTime = 0.0f;
 	float m_LastFrame = 0.0f;
 

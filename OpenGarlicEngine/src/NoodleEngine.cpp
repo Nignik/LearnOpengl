@@ -2,11 +2,14 @@
 
 NoodleEngine::NoodleEngine()
 	: m_Window(windowInit()),
-	m_Camera(std::make_shared<Camera>()),
-	m_CameraController(new CameraController(m_Camera))
+	m_Camera(std::make_shared<Camera>())
 {
-	glfwSetWindowUserPointer(m_Window, m_CameraController);
+	m_Controller = std::make_shared<Controller>();
+	m_Controller->Possess(m_Camera->GetSharedTransform());
+	glfwSetWindowUserPointer(m_Window, m_Controller.get());
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 NoodleEngine::~NoodleEngine()
@@ -22,7 +25,7 @@ void NoodleEngine::StartFrame()
 	m_DeltaTime = currentFrame - m_LastFrame;
 	m_LastFrame = currentFrame;
 
-	m_CameraController->processInput(m_Window, m_DeltaTime);
+	m_Controller->ProcessInput(m_Window, m_DeltaTime);
 
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -40,14 +43,29 @@ bool NoodleEngine::IsRunning()
 
 FrameData NoodleEngine::GetFrameData()
 {
-	glm::mat4 projection = glm::perspective(glm::radians(m_Camera->Zoom), static_cast<float>(SCR_WIDTH) / static_cast<float>(SCR_HEIGHT), 0.1f, 100.0f);
-	glm::mat4 view = m_Camera->GetViewMatrix();
-	return FrameData(m_DeltaTime, projection, view, m_Camera->Position);
+	mat4 projection = glm::perspective(glm::radians(m_Camera->GetZoom()), static_cast<float>(SCR_WIDTH) / static_cast<float>(SCR_HEIGHT), 0.1f, 1000.0f);
+	mat4 view = m_Camera->GetViewMatrix();
+	return FrameData(m_DeltaTime, projection, view, m_Camera->GetPosition());
+}
+
+vec2 NoodleEngine::GetResolution()
+{
+	return {SCR_WIDTH, SCR_HEIGHT};
 }
 
 GLFWwindow* NoodleEngine::GetWindow()
 {
 	return m_Window;
+}
+
+std::shared_ptr<Camera> NoodleEngine::GetCamera()
+{
+	return m_Camera;
+}
+
+std::shared_ptr<Controller> NoodleEngine::GetController()
+{
+	return m_Controller;
 }
 
 GLFWwindow* NoodleEngine::windowInit()
@@ -76,6 +94,9 @@ GLFWwindow* NoodleEngine::windowInit()
 	{
 		std::cout << "Failed to initialize GLAD" << std::endl;
 	}
+
+	stbi_set_flip_vertically_on_load(false);
+	glEnable(GL_DEPTH_TEST);
 
 	return window;
 }

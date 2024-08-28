@@ -26,7 +26,6 @@ void NoodleGui::RenderFrame()
 		if (ImGui::Button((button.label).c_str()))
 		{
 			button.func();
-			std::cout << "Button was clicked!" << std::endl;
 		}
 	}
 
@@ -35,12 +34,25 @@ void NoodleGui::RenderFrame()
 		if (ImGui::SliderFloat((slider.label).c_str(), &slider.value, slider.minValue, slider.maxValue))
 		{
 			slider.func(slider.value);
-			std::cout << "Slider slided!" << std::endl;
 		}
 	}
 
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
+void NoodleGui::ShowControllerSettings(std::weak_ptr<Controller> controller)
+{
+	if (auto locked = controller.lock())
+	{
+		FloatSlider new_slider("movement speed", [&](float new_speed) {locked->SetMovementSpeed(new_speed); }, 100.0f, 0.1f, 300.0f);
+		AddSlider(std::move(new_slider));
+	}
+	else
+	{
+		std::cerr << "Controller doesn't possess any objects" << std::endl;
+	}
+	
 }
 
 void NoodleGui::AddButton(Butt&& newButton)

@@ -1,0 +1,3 @@
+﻿  Application.cpp
+C:\DEV\GameEngines\OpenGarlicEngine\OpenGarlicEngine\src\MaterialCooker.h(11,3): warning C4305: 'initializing': truncation from 'double' to 'float'
+LINK : fatal error LNK1104: cannot open file 'C:\DEV\GameEngines\OpenGarlicEngine\OpenGarlicEngine\bin\Debug\OpenGarlicEngine.lib'

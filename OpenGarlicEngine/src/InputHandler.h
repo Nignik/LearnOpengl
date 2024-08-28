@@ -6,14 +6,14 @@
 
 #include <GLFW/glfw3.h>
 
-#include "Camera/CameraController.h"
+#include "Controller.h"
 
 inline void mouse_Callback(GLFWwindow* window, double xPosIn, double yPosIn)
 {
-	CameraController* cameraController = static_cast<CameraController*>(glfwGetWindowUserPointer(window));
-	if (cameraController)
+	auto controller = static_cast<Controller*>(glfwGetWindowUserPointer(window));
+	if (controller)
 	{
-		cameraController->onMouseMove(xPosIn, yPosIn);
+		controller->OnMouseMove(xPosIn, yPosIn);
 	}
 }
 
@@ -33,16 +33,16 @@ inline void key_Callback(GLFWwindow* window, int key, int scancode, int action, 
 		static bool cursorVisible = true;
 		cursorVisible = !cursorVisible;
 
-		CameraController* cameraController = static_cast<CameraController*>(glfwGetWindowUserPointer(window));
+		auto controller = static_cast<Controller*>(glfwGetWindowUserPointer(window));
 
 		if (cursorVisible)
 		{
-			cameraController->Stop();
+			controller->Stop();
 			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 		}
 		else
 		{
-			cameraController->Start();
+			controller->Start();
 			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		}
 	}

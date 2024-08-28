@@ -7,12 +7,12 @@
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
 
-#include "Vertex.h"
+#include "../Mesh.h"
 
 constexpr int sectorCount = 40;
 constexpr int stackCount = 30;
 
-namespace sphere
+namespace meshes
 {
 	inline std::vector<Vertex> generateVertices(float radius)
 	{
@@ -22,7 +22,7 @@ namespace sphere
 		float nx, ny, nz;
 		float lengthInv = 1.0f / radius;
 
-		float PI = glm::pi<float>();
+		constexpr auto PI = glm::pi<float>();
 		float sectorStep = 2 * PI / sectorCount;
 		float stackStep = PI / stackCount;
 		float sectorAngle, stackAngle;
@@ -88,5 +88,88 @@ namespace sphere
 		}
 
 		return { indices, lineIndices };
+	}
+
+	inline std::tuple<std::vector<Vertex>, std::vector<unsigned int>> GenerateCube(glm::vec3 size)
+	{
+		std::vector<Vertex> vertices = {
+			{ {-1.0f, -1.0f, -1.0f},  {0.0f,  0.0f, -1.0f} },
+			{ { 1.0f, -1.0f, -1.0f},  {0.0f,  0.0f, -1.0f} },
+			{ { 1.0f,  1.0f, -1.0f},  {0.0f,  0.0f, -1.0f} },
+			{ {-1.0f,  1.0f, -1.0f},  {0.0f,  0.0f, -1.0f} },
+
+			// Back face
+			{ {-1.0f, -1.0f,  1.0f},  {0.0f,  0.0f,  1.0f} },
+			{ {-1.0f,  1.0f,  1.0f},  {0.0f,  0.0f,  1.0f} },
+			{ { 1.0f,  1.0f,  1.0f},  {0.0f,  0.0f,  1.0f} },
+			{ { 1.0f, -1.0f,  1.0f},  {0.0f,  0.0f,  1.0f} },
+
+			// Left face
+			{ {-1.0f, -1.0f, -1.0f},  {-1.0f,  0.0f,  0.0f} },
+			{ {-1.0f,  1.0f, -1.0f},  {-1.0f,  0.0f,  0.0f} },
+			{ {-1.0f,  1.0f,  1.0f},  {-1.0f,  0.0f,  0.0f} },
+			{ {-1.0f, -1.0f,  1.0f},  {-1.0f,  0.0f,  0.0f} },
+
+			// Right face
+			{ { 1.0f, -1.0f, -1.0f},  {1.0f,  0.0f,  0.0f} },
+			{ { 1.0f, -1.0f,  1.0f},  {1.0f,  0.0f,  0.0f} },
+			{ { 1.0f,  1.0f,  1.0f},  {1.0f,  0.0f,  0.0f} },
+			{ { 1.0f,  1.0f, -1.0f},  {1.0f,  0.0f,  0.0f} },
+
+			// Bottom face
+			{ {-1.0f, -1.0f, -1.0f},  {0.0f, -1.0f,  0.0f} },
+			{ {-1.0f, -1.0f,  1.0f},  {0.0f, -1.0f,  0.0f} },
+			{ { 1.0f, -1.0f,  1.0f},  {0.0f, -1.0f,  0.0f} },
+			{ { 1.0f, -1.0f, -1.0f},  {0.0f, -1.0f,  0.0f} },
+
+			// Top face
+			{ {-1.0f,  1.0f, -1.0f},  {0.0f,  1.0f,  0.0f} },
+			{ { 1.0f,  1.0f, -1.0f},  {0.0f,  1.0f,  0.0f} },
+			{ { 1.0f,  1.0f,  1.0f},  {0.0f,  1.0f,  0.0f} },
+			{ {-1.0f,  1.0f,  1.0f},  {0.0f,  1.0f,  0.0f} }
+		};
+
+		for (auto& vert : vertices)
+		{
+			vert.Position.x *= size.x;
+			vert.Position.y *= size.y;
+			vert.Position.z *= size.z;
+		}
+
+		std::vector<unsigned int> indices = {
+			// Front face
+			0, 1, 2, 2, 3, 0,
+			// Back face
+			4, 5, 6, 6, 7, 4,
+			// Left face
+			8, 9, 10, 10, 11, 8,
+			// Right face
+			12, 13, 14, 14, 15, 12,
+			// Bottom face
+			16, 17, 18, 18, 19, 16,
+			// Top face
+			20, 21, 22, 22, 23, 20
+		};
+
+		std::tuple<std::vector<Vertex>, std::vector<unsigned int>> cube(vertices, indices);
+
+		return cube;
+	}
+
+	inline Mesh generateQuad()
+	{
+		std::vector<Vertex> vertices = {
+			{{-1.0f, -1.0f, 0.0f}},
+			{{1.0f, -1.0f, 0.0f}},
+			{{1.0f, 1.0f, 0.0f}},
+			{{-1.0f, 1.0f, 0.0f}}
+		};
+
+		std::vector<unsigned int> indices = {
+			0, 1, 2,
+			2, 3, 0
+		};
+
+		return Mesh(vertices, indices, std::vector<Texture>{});
 	}
 }

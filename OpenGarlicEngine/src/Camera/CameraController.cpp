@@ -19,14 +19,6 @@ void CameraController::processInput(GLFWwindow* window, float deltaTime)
 
 	if (m_CanMove)
 	{
-		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-			m_Camera->ProcessKeyboard(FORWARD, deltaTime);
-		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-			m_Camera->ProcessKeyboard(BACKWARD, deltaTime);
-		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-			m_Camera->ProcessKeyboard(LEFT, deltaTime);
-		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-			m_Camera->ProcessKeyboard(RIGHT, deltaTime);
 	}
 }
 
@@ -52,8 +44,6 @@ void CameraController::onMouseMove(double xPosIn, double yPosIn)
 
 	lastX = xPos;
 	lastY = yPos;
-
-	m_Camera->ProcessMouseMovement(xOffset, yOffset);
 }
 
 void CameraController::onScroll(double xOffset, double yOffset)

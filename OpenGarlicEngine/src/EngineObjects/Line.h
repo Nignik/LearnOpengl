@@ -6,21 +6,24 @@
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
 
-#include "../Shader/shader_m.h"
+#include "../Shader.h"
 #include <vector>
+
+using glm::vec3;
+using glm::mat4;
 
 class Line
 {
 public:
-	Line(std::vector<float>& vertices, glm::vec3 position);
+	Line(std::vector<float>& vertices, vec3 position);
 
-	void Update(glm::vec3 position, glm::vec3 newDirection);
+	void Update(vec3 position, vec3 newDirection);
 
-	void Draw(glm::mat4& projection, glm::mat4& view);
+	void Draw(mat4& projection, mat4& view);
 
 private:
 	GLuint VBO, VAO;
 
 	Shader shader;
-	glm::mat4 model;
+	mat4 model;
 };

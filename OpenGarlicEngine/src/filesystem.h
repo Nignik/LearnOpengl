@@ -7,7 +7,7 @@
 class FileSystem
 {
 private:
-	typedef std::string(*Builder) (const std::string& path);
+	using Builder = std::string(*) (const std::string& path);
 
 public:
 	static std::string getPath(const std::string& path)
