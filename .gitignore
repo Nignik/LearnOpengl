@@ -5,3 +5,6 @@ OpenGarlicEngine/obj/
 *.vcxproj.filters
 *.vcxproj.user
 *.vcxproj
+**/bin/
+**/obj/
+.vscode

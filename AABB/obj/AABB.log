@@ -1,2 +1,0 @@
-﻿LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
-  AABB.vcxproj -> C:\DEV\GameEngines\OpenGarlicEngine\AABB\bin\Debug\AABB.exe

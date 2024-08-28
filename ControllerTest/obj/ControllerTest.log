@@ -1,4 +1,0 @@
-﻿  Application.cpp
-C:\DEV\GameEngines\OpenGarlicEngine\OpenGarlicEngine\src\MaterialCooker.h(11,3): warning C4305: 'initializing': truncation from 'double' to 'float'
-LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
-  ControllerTest.vcxproj -> C:\DEV\GameEngines\OpenGarlicEngine\ControllerTest\bin\Debug\ControllerTest.exe
