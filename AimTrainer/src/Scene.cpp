@@ -24,14 +24,17 @@ void Scene::PrepareScene(NoodleEngine& engine)
 		newTransform.SetPosition(newTransform.GetPosition() + vec3(30.0f, 0.0f, 0.0f));
 	}
 
-	engine.GetController()->AddAction(std::bind(&Player::SetShoot, &m_Player), "shoot");
-	engine.GetController()->AddAction(std::bind(&Player::StopShooting, &m_Player), "stop shooting");
+	engine.GetController()->AddAction(std::bind([this]() {
+		m_Player.Shoot(this->m_Targets);
+		}), "shoot");
 	engine.GetController()->Possess(m_Player.GetSharedTransform());
 }
 
 void Scene::Draw(NoodleEngine& engine)
 {
 	auto [deltaTime, projection, view, position] = engine.GetFrameData();
+
+	m_Player.OnUpdate(deltaTime);
 
 	Material mat1 = MCooker::EMERALD, mat2 = MCooker::YELLOW_RUBBER;
 	Light light(vec3(0.0f), vec3(0.4f), vec3(0.4f), vec3(0.4f));
@@ -59,7 +62,5 @@ void Scene::Draw(NoodleEngine& engine)
 	glDisable(GL_DEPTH_TEST);
 
 	m_Overlay.Render();
-	
-	m_Player.Shoot(m_Targets);
 }
 

@@ -6,11 +6,10 @@ void ShaderOverlay::AddShader(Shader&& shader)
 }
 
 void ShaderOverlay::Render()
-{	
+{
 	for (auto& shader : m_Shaders)
 	{
 		m_ScreenQuad.Draw(shader);
 	}
-	
 }
 

@@ -2,33 +2,19 @@
 
 
 Player::Player(Transform transform)
-	: m_Transform(std::make_shared<Transform>(transform))
+	: m_Transform(std::make_shared<Transform>(transform)),
+	m_Gun(m_Transform)
 {
+}
+
+void Player::OnUpdate(float deltaTime)
+{
+	m_Gun.OnUpdate(deltaTime);
 }
 
 void Player::Shoot(std::map<int, std::optional<PhysicsObject>>& sceneObjects)
 {
-	if (m_Shoot)
-	{
-		Ray ray(m_Transform->GetPosition(), m_Transform->GetForwardDirection());
-		std::unique_ptr<PhysicsObject> hit = ray.RayCast(sceneObjects);
-		if (hit != nullptr)
-		{
-			sceneObjects.erase(hit->GetId());
-		}
-
-		m_Shoot = false;
-	}
-}
-
-void Player::SetShoot()
-{
-	m_Shoot = true;
-}
-
-void Player::StopShooting()
-{
-	m_Shoot = false;
+	m_Gun.Shoot(sceneObjects);
 }
 
 std::shared_ptr<Transform> Player::GetSharedTransform()
