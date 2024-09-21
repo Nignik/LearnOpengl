@@ -27,11 +27,6 @@ void RigidBody::OnUpdate()
 	}
 }
 
-void RigidBody::xd()
-{
-
-}
-
 void RigidBody::AddCollider(std::shared_ptr<Collider> newCollider)
 {
 	m_collider = newCollider;

@@ -2,7 +2,7 @@
 #include "PhysicsEngine.h"
 #include "Objectsmanager.h"
 
-extern Global::PhysicsEngine g_physicsEngine;
+extern Global::PhysicsEngine* g_physicsEngine;
 extern Global::ObjectsManager* g_objectsManager;
 
 Collider::Collider(std::shared_ptr<Mesh> mesh, std::weak_ptr<Transform> transform)
@@ -18,11 +18,6 @@ void Collider::Activate()
 }
 
 void Collider::OnUpdate(float deltaTime)
-{
-
-}
-
-void Collider::xd()
 {
 
 }

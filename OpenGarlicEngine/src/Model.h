@@ -24,7 +24,7 @@ public:
 	void Draw(Shader& shader);
 
 private:
-	std::vector<Texture> m_Textures_loaded;
+	std::vector<std::shared_ptr<Texture>> m_Textures_loaded;
 	std::vector<std::shared_ptr<Mesh>> m_Meshes;
 	std::string m_Directory;
 	bool m_GammaCorrection = true;
@@ -32,5 +32,5 @@ private:
 	void m_LoadModel(std::string const& path);
 	void m_ProcessNode(aiNode* node, const aiScene* scene);
 	std::shared_ptr<Mesh> m_ProcessMesh(aiMesh* mesh, const aiScene* scene);
-	std::vector<Texture> m_LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
+	std::vector<std::shared_ptr<Texture>> m_LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
 };

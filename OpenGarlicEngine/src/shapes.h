@@ -170,6 +170,6 @@ namespace meshes
 			2, 3, 0
 		};
 
-		return Mesh(vertices, indices, std::vector<Texture>{});
+		return Mesh(vertices, indices);
 	}
 }

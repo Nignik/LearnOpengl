@@ -1,6 +1,14 @@
 #include "Mesh.h"
 
 
+Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices, std::vector<std::shared_ptr<Texture>>&& textures /*= {}*/)
+	: m_Vertices(vertices),
+	m_Indices(indices),
+	m_Textures(std::move(textures))
+{
+	GenerateMesh();
+}
+
 void Mesh::Draw(Shader& shader)
 {
 	shader.Use();
@@ -13,7 +21,7 @@ void Mesh::Draw(Shader& shader)
 	{
 		glActiveTexture(GL_TEXTURE0 + i);
 		std::string number;
-		std::string name = m_Textures[i].type;
+		std::string name = m_Textures[i]->type;
 		if (name == "texture_diffuse")
 			number = std::to_string(diffuseNr++);
 		else if (name == "texture_specular")
@@ -24,7 +32,7 @@ void Mesh::Draw(Shader& shader)
 			number = std::to_string(heightNr++);
 
 		glUniform1i(glGetUniformLocation(shader.GetId(), (name + number).c_str()), i);
-		glBindTexture(GL_TEXTURE_2D, m_Textures[i].id);
+		glBindTexture(GL_TEXTURE_2D, m_Textures[i]->id);
 	}
 
 	glBindVertexArray(m_VAO);

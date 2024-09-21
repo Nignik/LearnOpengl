@@ -12,11 +12,10 @@ class RigidBody : public Component
 {
 public:
 	RigidBody(float mass, glm::vec3 velocity, std::shared_ptr<Transform> transform);
+	~RigidBody() override = default;
 
 	void Activate(float deltaTime);
 	void OnUpdate();
-
-	void xd() override;
 
 	void AddCollider(std::shared_ptr<Collider> newCollider);
 

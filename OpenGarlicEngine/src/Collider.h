@@ -21,11 +21,10 @@ class Collider : public Component
 {
 public:
 	Collider(std::shared_ptr<Mesh> mesh, std::weak_ptr<Transform> transform);
+	~Collider() override = default;
 
 	void Activate();
 	void OnUpdate(float deltaTime);
-
-	void xd() override;
 
 	uint32_t GetId() const;
 	BoundingBox GetBoundingBox() const;

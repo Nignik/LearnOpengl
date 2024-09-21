@@ -20,3 +20,4 @@
 #include "ObjectsManager.h"
 #include "PhysicsEngine.h"
 #include "PhysicsObject.h"
+#include "Procedural/ProceduralMesh.h"

@@ -33,22 +33,15 @@ struct Texture
 class Mesh
 {
 public:
-	template <typename T>
-	Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices, T&& textures)
-		: m_Vertices(vertices),
-		m_Indices(indices),
-		m_Textures(std::forward<T>(textures))
-	{
-		GenerateMesh();
-	}
+	Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices, std::vector<std::shared_ptr<Texture>>&& textures = {});
 
 	void Draw(Shader& shader);
 
 private:
 	GLuint m_VAO, m_VBO, m_EBO;
 	std::vector<Vertex> m_Vertices;
-	std::vector<unsigned int> m_Indices;
-	std::vector<Texture> m_Textures;
+	std::vector<uint32_t> m_Indices;
+	std::vector<std::shared_ptr<Texture>> m_Textures;
 
 	void GenerateMesh();
 };

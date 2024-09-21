@@ -6,9 +6,8 @@
 class Component
 {
 public:
-	Component();
-
-	virtual void xd() = 0;
+	Component() = default;
+	virtual ~Component() = default;
 	
 protected:
 };

@@ -15,9 +15,7 @@ int main()
 	g_physicsEngine->Init();
 	g_objectsManager->Init();
 
-	auto [vertices, indices] = meshes::GenerateCube(vec3(1.0f));
-	std::vector<Texture> textures;
-	auto mesh = std::make_shared<Mesh>(vertices, indices, textures);
+	auto mesh = Procedural::SphereMesh(2.0f);
 	auto model = std::make_shared<Model>(mesh);
 
 	std::vector<std::unique_ptr<PhysicsObject>> simulationObjects;
@@ -29,8 +27,6 @@ int main()
 		rigidBody->AddCollider(collider);
 		auto cube = std::make_unique<PhysicsObject>(model, sharedTransform, rigidBody);
 		simulationObjects.push_back(std::move(cube));
-
-		g_physicsEngine->AddComponent(rigidBody);
 	}
 
 	Shader mainShader("shaders/BasicVertex.vs", "shaders/BasicFragment.fs");
