@@ -11,7 +11,7 @@ Model::Model(std::shared_ptr<Mesh> mesh)
 {
 }
 
-void Model::Draw(Shader& shader)
+void Model::Draw(std::shared_ptr<Shader> shader)
 {
 	for (auto& mesh : m_Meshes)
 		mesh->Draw(shader);

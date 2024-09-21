@@ -15,6 +15,13 @@ int main()
 	g_physicsEngine->Init();
 	g_objectsManager->Init();
 
+	const std::shared_ptr<MCooker::DefaultMaterial> BRONZE = std::make_shared<MCooker::DefaultMaterial>(
+		vec3(0.2125f, 0.1275f, 0.054f),
+		vec3(0.714f, 0.4284f, 0.18144f),
+		vec3(0.393548f, 0.271906f, 0.166721f),
+		0.2f
+	);
+
 	auto mesh = Procedural::SphereMesh(2.0f);
 	auto model = std::make_shared<Model>(mesh);
 
@@ -25,11 +32,9 @@ int main()
 		std::shared_ptr<RigidBody> rigidBody = std::make_shared<RigidBody>(0.0f, glm::ballRand(5.0f), sharedTransform);
 		std::shared_ptr<Collider> collider = std::make_shared<Collider>(mesh, sharedTransform);
 		rigidBody->AddCollider(collider);
-		auto cube = std::make_unique<PhysicsObject>(model, sharedTransform, rigidBody);
+		auto cube = std::make_unique<PhysicsObject>(model, sharedTransform, rigidBody, BRONZE);
 		simulationObjects.push_back(std::move(cube));
 	}
-
-	Shader mainShader("shaders/BasicVertex.vs", "shaders/BasicFragment.fs");
 
 	while (engine.IsRunning())
 	{
@@ -41,8 +46,8 @@ int main()
 		
 		for (auto& cube : simulationObjects)
 		{
-			SetupBasicShader(mainShader, engine, cube->GetSharedTransform()->GetTransformMatrix());
-			cube->Draw(mainShader);
+			cube->SetMVP(view, projection, cameraPosition);
+			cube->Draw();
 		}
 
 		engine.EndFrame();

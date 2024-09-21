@@ -11,6 +11,7 @@
 #include "Collider.h"
 #include "Model.h"
 #include "RigidBody.h"
+#include "Material.h"
 
 using glm::vec3;
 using glm::mat4;
@@ -18,14 +19,16 @@ using glm::mat4;
 class PhysicsObject
 {
 public:
-	PhysicsObject(std::shared_ptr<Model> model, std::shared_ptr<Transform> transform, std::shared_ptr <RigidBody> rigidBody);
+	PhysicsObject(std::shared_ptr<Model> model, std::shared_ptr<Transform> transform, std::shared_ptr <RigidBody> rigidBody, const std::shared_ptr<Material> material);
 
-	void Draw(Shader& shader);
+	void Draw();
 
 	void OnUpdate();
 
 	vec3 GetPosition();
 	void SetPosition(vec3 newPosition);
+
+	void SetMVP(mat4 view, mat4 projection, vec3 cameraPosition);
 
 	std::shared_ptr<Transform> GetSharedTransform();
 
@@ -35,4 +38,5 @@ private:
 	std::shared_ptr<Model> m_model;
 	std::shared_ptr<Transform> m_transform;
 	std::shared_ptr <RigidBody> m_rigidBody;
+	std::shared_ptr<Material> m_material;
 };

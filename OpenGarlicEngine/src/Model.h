@@ -21,7 +21,7 @@ class Model
 public:
 	Model(std::string const& path, bool gamma = false);
 	Model(std::shared_ptr<Mesh> mesh);
-	void Draw(Shader& shader);
+	void Draw(std::shared_ptr<Shader> shader);
 
 private:
 	std::vector<std::shared_ptr<Texture>> m_Textures_loaded;

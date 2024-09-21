@@ -14,10 +14,10 @@ public:
 	{
 	}
 
-	void AddShader(Shader&& shader);
+	void AddShader(std::shared_ptr<Shader> shader);
 	void Render();
 
 private:
-	std::vector<Shader> m_Shaders;
+	std::vector<std::shared_ptr<Shader>> m_Shaders;
 	Mesh m_ScreenQuad;
 };

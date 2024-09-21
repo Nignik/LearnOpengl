@@ -11,23 +11,6 @@
 using glm::vec2, glm::vec3, glm::vec4;
 using glm::mat2, glm::mat3, glm::mat4;
 
-struct Material
-{
-	vec3 ambient{};
-	vec3 diffuse{};
-	vec3 specular{};
-
-	float shininess{};
-};
-
-struct Light
-{
-	vec3 position{};
-	vec3 ambient{};
-	vec3 diffuse{};
-	vec3 specular{};
-};
-
 class Shader
 {
 public:

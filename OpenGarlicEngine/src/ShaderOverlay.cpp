@@ -1,6 +1,6 @@
 #include "ShaderOverlay.h"
 
-void ShaderOverlay::AddShader(Shader&& shader)
+void ShaderOverlay::AddShader(std::shared_ptr<Shader> shader)
 {
 	m_Shaders.push_back(shader);
 }
