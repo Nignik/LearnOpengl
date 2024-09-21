@@ -41,8 +41,9 @@ void Controller::ProcessInput(GLFWwindow* window, float deltaTime)
 			}
 		}
 
-		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_PRESS)
-			m_Actions["shoot"]();
+		// TODO: Make it do what it is suppposed to do
+		/*if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_PRESS)
+			m_Actions["shoot"]();*/
 		
 	}
 }

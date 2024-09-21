@@ -1,41 +1,65 @@
 #include "Collider.h"
+#include "PhysicsEngine.h"
+#include "Objectsmanager.h"
 
+extern Global::PhysicsEngine g_physicsEngine;
+extern Global::ObjectsManager* g_objectsManager;
 
-Collider::Collider(Mesh& mesh, std::weak_ptr<Transform> transform)
-	: m_Mesh(mesh),
-	m_Transform(transform)
+Collider::Collider(std::shared_ptr<Mesh> mesh, std::weak_ptr<Transform> transform)
+	: m_mesh(mesh),
+	m_transform(transform)
 {
+	m_id = g_objectsManager->GenerateObjectId();
 }
 
-bool Collider::IsColliding(Collider&& other)
+void Collider::Activate()
 {
-	auto thisLock = m_Transform.lock();
-	auto otherTransform = other.GetTransform();
-	auto otherLock = otherTransform.lock();
 
-	if (thisLock && otherLock)
+}
+
+void Collider::OnUpdate(float deltaTime)
+{
+
+}
+
+void Collider::xd()
+{
+
+}
+
+uint32_t Collider::GetId() const
+{
+	return m_id;
+}
+
+BoundingBox Collider::GetBoundingBox() const
+{
+	if (auto transform = m_transform.lock())
 	{
-		vec3 thisPos = thisLock->GetPosition();
-		vec3 thisScale = thisLock->GetScale();
-
-		vec3 otherPos = otherLock->GetPosition();
-		vec3 otherScale = otherLock->GetScale();
-		return (
-			thisPos.x - thisScale.x <= otherPos.x + otherScale.x &&
-			thisPos.x + thisScale.x >= otherPos.x - otherScale.x &&
-			thisPos.y - thisScale.y <= otherPos.y + otherScale.y &&
-			thisPos.y + thisScale.y >= otherPos.y - otherScale.y &&
-			thisPos.z - thisScale.z <= otherPos.z + otherScale.z &&
-			thisPos.z + thisScale.z >= otherPos.z - otherScale.z
-		);
+		auto position = transform->GetPosition();
+		auto scale = transform->GetScale();
+		return BoundingBox{
+			.x1 = position.x - scale.x, .x2 = position.x + scale.x,
+			.y1 = position.y - scale.y, .y2 = position.y + scale.y,
+			.z1 = position.z - scale.z, .z2 = position.z + scale.z,
+		};
 	}
 
-	std::cerr << "Transform doesn't exist" << std::endl;
+	std::cerr << "Collider has no parent transform" << std::endl;
+	return BoundingBox{};
+}
 
-	return false;
+void Collider::SetCollision(bool isColliding)
+{
+	m_isColliding = isColliding;
+}
+
+bool Collider::IsColliding() const
+{
+	return m_isColliding;
 }
 
 std::weak_ptr<Transform> Collider::GetTransform()
 {
-	return m_Transform;
+	return m_transform;
 }

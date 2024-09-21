@@ -20,17 +20,17 @@ class Model
 {
 public:
 	Model(std::string const& path, bool gamma = false);
-	Model(Mesh& mesh);
+	Model(std::shared_ptr<Mesh> mesh);
 	void Draw(Shader& shader);
 
 private:
 	std::vector<Texture> m_Textures_loaded;
-	std::vector<Mesh> m_Meshes;
+	std::vector<std::shared_ptr<Mesh>> m_Meshes;
 	std::string m_Directory;
 	bool m_GammaCorrection = true;
 
 	void m_LoadModel(std::string const& path);
 	void m_ProcessNode(aiNode* node, const aiScene* scene);
-	Mesh m_ProcessMesh(aiMesh* mesh, const aiScene* scene);
+	std::shared_ptr<Mesh> m_ProcessMesh(aiMesh* mesh, const aiScene* scene);
 	std::vector<Texture> m_LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
 };

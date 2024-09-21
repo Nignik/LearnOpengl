@@ -6,7 +6,7 @@ Model::Model(std::string const& path, bool gamma)
 	m_LoadModel(path);
 }
 
-Model::Model(Mesh& mesh)
+Model::Model(std::shared_ptr<Mesh> mesh)
 	: m_Meshes({ mesh })
 {
 }
@@ -14,7 +14,7 @@ Model::Model(Mesh& mesh)
 void Model::Draw(Shader& shader)
 {
 	for (auto& mesh : m_Meshes)
-		mesh.Draw(shader);
+		mesh->Draw(shader);
 }
 
 void Model::m_LoadModel(std::string const& path)
@@ -46,7 +46,7 @@ void Model::m_ProcessNode(aiNode* node, const aiScene* scene)
 	}
 }
 
-Mesh Model::m_ProcessMesh(aiMesh* mesh, const aiScene* scene)
+std::shared_ptr<Mesh> Model::m_ProcessMesh(aiMesh* mesh, const aiScene* scene)
 {
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
@@ -118,7 +118,7 @@ Mesh Model::m_ProcessMesh(aiMesh* mesh, const aiScene* scene)
 	std::vector<Texture> heightMaps = m_LoadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
 	textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
-	return Mesh(vertices, indices, textures);
+	return std::make_shared<Mesh>( vertices, indices, textures );
 }
 
 std::vector<Texture> Model::m_LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName)

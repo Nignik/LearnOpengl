@@ -13,10 +13,11 @@
 #include "Camera/Camera.h"
 #include "Camera/CameraController.h"
 #include "InputHandler.h"
-#include "EngineObjects/Line.h"
+#include "Line.h"
 #include "NoodleGui.h"
 #include "stb_image.h"
 #include "Controller.h"
+#include "ObjectsManager.h"
 
 #include <imgui.h>
 #include <backends/imgui_impl_glfw.h>
@@ -56,8 +57,10 @@ public:
 
 private:
 	GLFWwindow* m_Window;
+
 	std::shared_ptr<Camera> m_Camera;
 	std::shared_ptr<Controller> m_Controller;
+
 	float m_DeltaTime = 0.0f;
 	float m_LastFrame = 0.0f;
 

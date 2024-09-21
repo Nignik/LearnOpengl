@@ -7,6 +7,7 @@ NoodleEngine::NoodleEngine()
 	m_Controller = std::make_shared<Controller>();
 	m_Controller->Possess(m_Camera->GetSharedTransform());
 	glfwSetWindowUserPointer(m_Window, m_Controller.get());
+
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

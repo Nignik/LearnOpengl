@@ -5,7 +5,7 @@
 #include <optional>
 
 #include "Collider.h"
-#include "EngineObjects/PhysicsObject.h"
+#include "PhysicsObject.h"
 
 using glm::vec3;
 
