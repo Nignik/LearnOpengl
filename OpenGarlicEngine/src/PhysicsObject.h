@@ -28,8 +28,6 @@ public:
 	vec3 GetPosition();
 	void SetPosition(vec3 newPosition);
 
-	void SetMVP(mat4 view, mat4 projection, vec3 cameraPosition);
-
 	std::shared_ptr<Transform> GetSharedTransform();
 
 private:

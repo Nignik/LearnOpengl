@@ -15,7 +15,7 @@ class Controller
 public:
 	Controller(float movementSpeed = 100.0f, float cameraSpeed = 0.001f);
 
-	void ProcessInput(GLFWwindow* window, float deltaTime);
+	void ProcessInput(GLFWwindow* window);
 	void OnMouseMove(double xPosIn, double yPosIn);
 
 	void SetMovementSpeed(float newSpeed);

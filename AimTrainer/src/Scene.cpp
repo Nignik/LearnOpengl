@@ -32,7 +32,7 @@ void Scene::PrepareScene(NoodleEngine& engine)
 
 void Scene::Draw(NoodleEngine& engine)
 {
-	auto [deltaTime, projection, view, position] = engine.GetFrameData();
+	auto [deltaTime, projection, view, position] = engine.GenerateFrameData();
 
 	m_Player.OnUpdate(deltaTime);
 

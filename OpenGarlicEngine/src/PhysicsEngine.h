@@ -18,7 +18,7 @@ namespace Global
 		static void Init();
 		static void Shutdown();
 
-		static void Update(float deltaTime);
+		static void Update();
 		static bool CheckCollision(BoundingBox& box, BoundingBox& otherBox);
 
 		static void AddComponent(std::shared_ptr<Component> newComponent);

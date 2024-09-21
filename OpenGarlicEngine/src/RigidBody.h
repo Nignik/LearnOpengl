@@ -14,7 +14,7 @@ public:
 	RigidBody(float mass, glm::vec3 velocity, std::shared_ptr<Transform> transform);
 	~RigidBody() override = default;
 
-	void Activate(float deltaTime);
+	void Activate();
 	void OnUpdate();
 
 	void AddCollider(std::shared_ptr<Collider> newCollider);

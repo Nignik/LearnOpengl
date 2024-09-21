@@ -24,11 +24,11 @@ namespace Global
 		g_physicsEngine = nullptr;
 	}
 
-	void PhysicsEngine::Update(float deltaTime)
+	void PhysicsEngine::Update()
 	{
 		for (auto& body : g_physicsEngine->m_rigidBodies)
 		{
-			body->Activate(deltaTime);
+			body->Activate();
 		}
 
 		for (auto& collider : g_physicsEngine->m_colliders)

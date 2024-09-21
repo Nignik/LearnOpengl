@@ -1,6 +1,7 @@
 #include "RigidBody.h"
 
 #include "PhysicsEngine.h"
+#include "FrameData.h"
 
 extern Global::PhysicsEngine* g_physicsEngine;
 
@@ -12,11 +13,11 @@ RigidBody::RigidBody(float mass, glm::vec3 velocity, std::shared_ptr<Transform> 
 {
 }
 
-void RigidBody::Activate(float deltaTime)
+void RigidBody::Activate()
 {
 	auto pos = m_transform->GetPosition();
 	m_prevPosition = pos;
-	m_transform->SetPosition(pos + m_velocity * deltaTime);
+	m_transform->SetPosition(pos + m_velocity * Global::FrameData::GetInstance().deltaTime);
 }
 
 void RigidBody::OnUpdate()

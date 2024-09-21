@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include "FrameData.h"
+
 Controller::Controller(float movementSpeed, float cameraSpeed)
 	: m_MovementSpeed(movementSpeed),
 	m_MouseSensitivity(cameraSpeed)
@@ -9,14 +11,14 @@ Controller::Controller(float movementSpeed, float cameraSpeed)
 
 }
 
-void Controller::ProcessInput(GLFWwindow* window, float deltaTime)
+void Controller::ProcessInput(GLFWwindow* window)
 {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
 
 	if (m_MovementEnabled)
 	{
-		float velocity = m_MovementSpeed * deltaTime;
+		float velocity = m_MovementSpeed * Global::FrameData::GetInstance().deltaTime;
 		
 		for (auto& possession : m_PossessedObjects)
 		{

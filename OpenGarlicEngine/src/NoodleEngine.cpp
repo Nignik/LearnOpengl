@@ -22,11 +22,9 @@ void NoodleEngine::StartFrame()
 {
 	glfwPollEvents();
 
-	float currentFrame = static_cast<float>(glfwGetTime());
-	m_DeltaTime = currentFrame - m_LastFrame;
-	m_LastFrame = currentFrame;
+	GenerateFrameData();
 
-	m_Controller->ProcessInput(m_Window, m_DeltaTime);
+	m_Controller->ProcessInput(m_Window);
 
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -42,11 +40,17 @@ bool NoodleEngine::IsRunning()
 	return !glfwWindowShouldClose(m_Window);
 }
 
-FrameData NoodleEngine::GetFrameData()
+void NoodleEngine::GenerateFrameData()
 {
-	mat4 projection = glm::perspective(glm::radians(m_Camera->GetZoom()), static_cast<float>(SCR_WIDTH) / static_cast<float>(SCR_HEIGHT), 0.1f, 1000.0f);
-	mat4 view = m_Camera->GetViewMatrix();
-	return FrameData(m_DeltaTime, projection, view, m_Camera->GetPosition());
+	auto& frameData = Global::FrameData::GetInstance();
+
+	float currentTime = static_cast<float>(glfwGetTime());
+	frameData.deltaTime = currentTime - m_LastFrame;
+	m_LastFrame = currentTime;
+
+	frameData.projection = glm::perspective(glm::radians(m_Camera->GetZoom()), static_cast<float>(SCR_WIDTH) / static_cast<float>(SCR_HEIGHT), 0.1f, 1000.0f);
+	frameData.view = m_Camera->GetViewMatrix();
+	frameData.position = m_Camera->GetPosition();
 }
 
 vec2 NoodleEngine::GetResolution()

@@ -18,6 +18,7 @@
 #include "stb_image.h"
 #include "Controller.h"
 #include "ObjectsManager.h"
+#include "FrameData.h"
 
 #include <imgui.h>
 #include <backends/imgui_impl_glfw.h>
@@ -25,15 +26,6 @@
 
 using glm::vec2, glm::vec3;
 using glm::mat4;
-
-
-struct FrameData
-{
-	float deltaTime;
-	mat4 projection;
-	mat4 view;
-	vec3 position;
-};
 
 constexpr unsigned int SCR_WIDTH = 1200;
 constexpr unsigned int SCR_HEIGHT = 800;
@@ -48,7 +40,7 @@ public:
 	void EndFrame();
 	bool IsRunning();
 
-	FrameData GetFrameData();
+	void GenerateFrameData();
 	vec2 GetResolution();
 	GLFWwindow* GetWindow();
 	std::shared_ptr<Camera> GetCamera();

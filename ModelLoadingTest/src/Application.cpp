@@ -40,7 +40,7 @@ int main()
 
 		shader.Use();
 
-		auto [deltaTime, projection, view, position] = engine.GetFrameData();
+		auto [deltaTime, projection, view, position] = engine.GenerateFrameData();
 		auto newTransform = glm::mat4(1.0f);
 
 		shader.SetMat4("projection", projection);

@@ -3,6 +3,8 @@
 #include "ObjectsManager.h"
 #include "PhysicsEngine.h"
 
+#include "FrameData.h"
+
 extern Global::ObjectsManager* g_objectsManager;
 extern Global::PhysicsEngine* g_physicsEngine;
 
@@ -18,6 +20,9 @@ PhysicsObject::PhysicsObject(std::shared_ptr<Model> model, std::shared_ptr<Trans
 
 void PhysicsObject::Draw()
 {
+	auto& frameData = Global::FrameData::GetInstance();
+	m_material->SetMVP(m_transform->GetTransformMatrix(), frameData.view, frameData.projection);
+	m_material->SetShaderParameter("viewPos", frameData.position);
 	m_material->Use();
 	m_model->Draw(m_material->GetShader());
 }
@@ -34,12 +39,6 @@ vec3 PhysicsObject::GetPosition()
 void PhysicsObject::SetPosition(vec3 newPosition)
 {
 	m_transform->SetPosition(newPosition);
-}
-
-void PhysicsObject::SetMVP(mat4 view, mat4 projection, vec3 cameraPosition)
-{
-	m_material->SetMVP(m_transform->GetTransformMatrix(), view, projection);
-	m_material->SetShaderParameter("viewPos", cameraPosition);
 }
 
 std::shared_ptr<Transform> PhysicsObject::GetSharedTransform()

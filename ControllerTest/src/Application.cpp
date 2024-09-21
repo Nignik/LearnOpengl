@@ -35,7 +35,7 @@ int main()
 	{
 		engine.StartFrame();
 
-		auto [deltaTime, projection, view, position] = engine.GetFrameData();
+		auto [deltaTime, projection, view, position] = engine.GenerateFrameData();
 		boxShader.SetMat4("projection", projection);
 		boxShader.SetMat4("view", view);
 

@@ -40,13 +40,10 @@ int main()
 	{
 		engine.StartFrame();
 
-		auto [deltaTime, projection, view, cameraPosition] = engine.GetFrameData();
-
-		g_physicsEngine->Update(deltaTime);
+		g_physicsEngine->Update();
 		
 		for (auto& cube : simulationObjects)
 		{
-			cube->SetMVP(view, projection, cameraPosition);
 			cube->Draw();
 		}
 
