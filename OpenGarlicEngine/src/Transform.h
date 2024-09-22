@@ -2,9 +2,9 @@
 
 #include <glad/glad.h>
 
-#include <glm.hpp>
+#include <glm/glm.hpp>
 #define GLM_ENABLE_EXPERIMENTAL
-#include <gtx/quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
 
 using glm::vec2, glm::vec3;
 using glm::mat4;

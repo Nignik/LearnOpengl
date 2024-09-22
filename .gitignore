@@ -8,3 +8,5 @@ OpenGarlicEngine/obj/
 **/bin/
 **/obj/
 .vscode
+out/
+imgui/

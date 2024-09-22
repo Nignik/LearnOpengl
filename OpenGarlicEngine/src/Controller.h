@@ -26,7 +26,6 @@ public:
 	void Stop();
 	void Start();
 
-
 private:
 	std::vector<std::weak_ptr<Transform>> m_PossessedObjects;
 	std::map<std::string, std::function<void()>> m_Actions;

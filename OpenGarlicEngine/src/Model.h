@@ -1,7 +1,7 @@
 #pragma once
 
 #include <glad/glad.h>
-#include <glm.hpp>
+#include <glm/glm.hpp>
 #include "stb_image.h"
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>

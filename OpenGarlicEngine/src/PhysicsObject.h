@@ -1,8 +1,8 @@
 #pragma once
 
-#include <glm.hpp>
+#include <glm/glm.hpp>
 #define GLM_ENABLE_EXPERIMENTAL
-#include <gtx/transform.hpp>
+#include <glm/gtx/transform.hpp>
 #include <vector>
 
 #include "Shader.h"

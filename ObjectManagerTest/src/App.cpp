@@ -3,7 +3,7 @@
 #include <random>
 #include <vector>
 
-#include <gtc/random.hpp>
+#include <glm/gtc/random.hpp>
 
 extern Global::PhysicsEngine* g_physicsEngine;
 extern Global::ObjectsManager* g_objectsManager;
