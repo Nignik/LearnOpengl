@@ -42,6 +42,37 @@ namespace MCooker
 		float m_shininess;
 	};
 
+	class LightMaterial : public Material
+	{
+	public:
+		LightMaterial(vec3 color, float brightness)
+			: Material(std::make_shared<Shader>("shaders/default_light.vs", "shaders/default_light.fs")),
+			m_color(color),
+			m_brightness(brightness)
+		{
+		}
+
+		void Use() override
+		{
+			SetShaderParameter("color", m_color);
+			SetShaderParameter("brightness", m_brightness);
+		}
+
+		void SetBrightness(float newBrightness)
+		{
+			m_brightness = newBrightness;
+		}
+		void SetColor(vec3 newColor)
+		{
+			m_color = newColor;
+		}
+
+	private:
+		vec3 m_color;
+		
+		float m_brightness;
+	};
+
 	/*const std::shared_ptr<DefaultMaterial> EMERALD = std::make_shared<DefaultMaterial>(
 		vec3(0.0215f, 0.1745f, 0.0215f),
 		vec3(0.07568f, 0.61424f, 0.07568f),

@@ -31,6 +31,12 @@ FetchContent_Declare(
     GIT_TAG v1.91.2
     SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/imgui
 )
+FetchContent_Declare(
+    rapidcsv
+    GIT_REPOSITORY https://github.com/d99kris/rapidcsv.git
+    GIT_TAG v8.83
+)
 
 add_subdirectory("OpenGarlicEngine")
 add_subdirectory("ObjectManagerTest")
+add_subdirectory("PerfectlyBlack")

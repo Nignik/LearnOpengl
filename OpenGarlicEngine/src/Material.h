@@ -79,10 +79,4 @@ public:
 
 protected:
 	std::shared_ptr<Shader> m_shader;
-
-	vec3 ambient{};
-	vec3 diffuse{};
-	vec3 specular{};
-
-	float shininess{};
 };
