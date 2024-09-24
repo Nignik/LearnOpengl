@@ -1,7 +1,7 @@
 file(GLOB_RECURSE SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 file(GLOB_RECURSE HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h")
 
-add_library(${PROJECT_NAME} STATIC ${SOURCES})
+add_library(${PROJECT_NAME} STATIC ${SOURCES} "src/Drawable.h")
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 FetchContent_MakeAvailable(glfw glm imgui assimp)
@@ -16,7 +16,7 @@ add_library(imgui_glfw STATIC
 
   imgui/backends/imgui_impl_glfw.cpp
   imgui/backends/imgui_impl_opengl3.cpp
-)
+ "src/Drawable.h")
 target_link_libraries(imgui_glfw PUBLIC glfw ${OPENGL_LIBRARIES})
 target_include_directories(imgui_glfw
 PUBLIC
@@ -25,7 +25,7 @@ PUBLIC
 )
 
 set(GLAD_SOURCES ${PROJECT_SOURCE_DIR}/external/glad/src/glad.c)
-add_library(glad STATIC ${GLAD_SOURCES})
+add_library(glad STATIC ${GLAD_SOURCES} "src/Drawable.h")
 target_include_directories(glad PUBLIC ${PROJECT_SOURCE_DIR}/external/glad/include)
 
 
@@ -34,7 +34,11 @@ target_link_libraries(${PROJECT_NAME} PUBLIC glfw glad glm OpenGL::GL assimp img
 add_custom_command(
     TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/bin/shaders
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/bin/resources
     COMMAND ${CMAKE_COMMAND} -E copy_directory
             ${CMAKE_CURRENT_SOURCE_DIR}/shaders
             ${CMAKE_BINARY_DIR}/bin/shaders
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+            ${CMAKE_SOURCE_DIR}/resources
+            ${CMAKE_BINARY_DIR}/bin/resources
 )

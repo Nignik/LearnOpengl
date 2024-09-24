@@ -40,3 +40,4 @@ FetchContent_Declare(
 add_subdirectory("OpenGarlicEngine")
 add_subdirectory("ObjectManagerTest")
 add_subdirectory("PerfectlyBlack")
+add_subdirectory("DepthTesting")

@@ -19,11 +19,13 @@ using glm::mat4;
 class PhysicsObject
 {
 public:
-	PhysicsObject(std::shared_ptr<Model> model, std::shared_ptr<Transform> transform, std::shared_ptr <RigidBody> rigidBody, const std::shared_ptr<Material> material);
+	PhysicsObject(std::shared_ptr<Model> model, std::shared_ptr<Transform> transform, std::shared_ptr <RigidBody> rigidBody);
 
 	void Draw();
 
 	void OnUpdate();
+
+	void AddMaterial(std::shared_ptr<Material> material);
 
 	vec3 GetPosition();
 	void SetPosition(vec3 newPosition);

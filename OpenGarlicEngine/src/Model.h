@@ -11,8 +11,7 @@
 
 #include "Mesh.h"
 #include "Shader.h"
-
-unsigned int TextureFromFile(const char* path, const std::string& directory, bool gamma = false);
+#include "Utils.h"
 
 using glm::vec2, glm::vec3;
 

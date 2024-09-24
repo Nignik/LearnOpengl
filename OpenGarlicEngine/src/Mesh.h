@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "Shader.h"
+#include "Utils.h"
 
 constexpr int MAX_BONE_INFLUENCE = 4;
 
@@ -36,6 +37,8 @@ public:
 	Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices, std::vector<std::shared_ptr<Texture>>&& textures = {});
 
 	void Draw(std::shared_ptr<Shader> shader);
+
+	void AddTexture(std::shared_ptr<Texture> newTexture);
 
 private:
 	GLuint m_VAO, m_VBO, m_EBO;

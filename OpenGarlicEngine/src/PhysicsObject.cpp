@@ -8,12 +8,11 @@
 extern Global::ObjectsManager* g_objectsManager;
 extern Global::PhysicsEngine* g_physicsEngine;
 
-PhysicsObject::PhysicsObject(std::shared_ptr<Model> model, std::shared_ptr<Transform> transform, std::shared_ptr <RigidBody> rigidBody, const std::shared_ptr<Material> material)
+PhysicsObject::PhysicsObject(std::shared_ptr<Model> model, std::shared_ptr<Transform> transform, std::shared_ptr <RigidBody> rigidBody)
 	: m_id(g_objectsManager->GenerateObjectId()),
 	m_model(model),
 	m_transform(transform),
-	m_rigidBody(std::move(rigidBody)),
-	m_material(material)
+	m_rigidBody(std::move(rigidBody))
 {
 	g_physicsEngine->AddComponent(m_rigidBody);
 }
@@ -21,14 +20,26 @@ PhysicsObject::PhysicsObject(std::shared_ptr<Model> model, std::shared_ptr<Trans
 void PhysicsObject::Draw()
 {
 	auto& frameData = Global::FrameData::GetInstance();
-	m_material->SetMVP(m_transform->GetTransformMatrix(), frameData.view, frameData.projection);
-	m_material->SetShaderParameter("viewPos", frameData.position);
-	m_material->Use();
-	m_model->Draw(m_material->GetShader());
+	if (m_material)
+	{
+		m_material->SetMVP(m_transform->GetTransformMatrix(), frameData.view, frameData.projection);
+		m_material->SetShaderParameter("viewPos", frameData.position);
+		m_material->Use();
+		m_model->Draw(m_material->GetShader());
+	}
+	else
+	{
+		std::cerr << "No material has been set" << std::endl;
+	}
 }
 
 void PhysicsObject::OnUpdate()
 {
+}
+
+void PhysicsObject::AddMaterial(std::shared_ptr<Material> material)
+{
+	m_material = material;
 }
 
 vec3 PhysicsObject::GetPosition()

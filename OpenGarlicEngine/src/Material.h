@@ -18,7 +18,7 @@ public:
 	{
 	}
 
-	virtual void Use() = 0;
+	virtual void Use() {};
 
 	std::shared_ptr<Shader> GetShader()
 	{

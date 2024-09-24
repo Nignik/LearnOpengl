@@ -42,6 +42,13 @@ void Mesh::Draw(std::shared_ptr<Shader> shader)
 	glActiveTexture(GL_TEXTURE0);
 }
 
+
+
+void Mesh::AddTexture(std::shared_ptr<Texture> newTexture)
+{
+	m_Textures.push_back(newTexture);
+}
+
 void Mesh::GenerateMesh()
 {
 	glGenVertexArrays(1, &m_VAO);
