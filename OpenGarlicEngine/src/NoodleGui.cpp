@@ -45,7 +45,7 @@ void NoodleGui::ShowControllerSettings(std::weak_ptr<Controller> controller)
 {
 	if (auto locked = controller.lock())
 	{
-		FloatSlider new_slider("movement speed", [&](float new_speed) {locked->SetMovementSpeed(new_speed); }, 100.0f, 0.1f, 300.0f);
+		FloatSlider new_slider("movement speed", [locked](float new_speed) {locked->SetMovementSpeed(new_speed); }, 100.0f, 0.1f, 300.0f);
 		AddSlider(std::move(new_slider));
 	}
 	else

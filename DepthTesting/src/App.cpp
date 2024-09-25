@@ -5,39 +5,49 @@
 #include <Utils.h>
 
 extern Global::ObjectsManager* g_objectsManager;
-extern Global::PhysicsEngine* g_physicsEngine;
 
 int main()
 {
 	NoodleEngine engine;
+	NoodleGui gui(engine.GetWindow());
 
-	g_physicsEngine->Init();
+	gui.ShowControllerSettings(engine.GetController());
+
 	g_objectsManager->Init();
 
-	auto mesh = Procedural::CubeMesh();
-	std::shared_ptr<Texture> texture = std::make_shared<Texture>(TextureFromFile("bricks2_disp.jpg", "resources/textures"), "texture_diffuse", "resources/textures");
-	mesh->AddTexture(texture);
-	auto model = std::make_shared<Model>(mesh);
+	auto material = std::make_shared<Material>(std::make_shared<Shader>("shaders/crate_shader.vs", "shaders/crate_shader.fs"));
 
-	auto crateMaterial = std::make_shared<Material>(std::make_shared<Shader>("shaders/crate_shader.vs", "shaders/crate_shader.fs"));
+	auto crateMesh = Procedural::CubeMesh();
+	auto crateTexture = std::make_shared<Texture>(TextureFromFile("bricks2_disp.jpg", "resources/textures"), "texture_diffuse", "resources/textures");
+	crateMesh->AddTexture(crateTexture);
+	auto crateModel = std::make_shared<Model>(crateMesh);
 
-	std::shared_ptr<Transform> sharedTransform = std::make_shared<Transform>(vec3(0.0f), 0.0f, 0.0f, 0.0f, vec3(4.0f));
-	std::shared_ptr<RigidBody> rigidBody = std::make_shared<RigidBody>(0.0f, vec3(0.0f), sharedTransform);
-	std::shared_ptr<Collider> collider = std::make_shared<Collider>(mesh, sharedTransform);
-	rigidBody->AddCollider(collider);
-	auto crate = std::make_unique<PhysicsObject>(model, sharedTransform, rigidBody);
-	crate->AddMaterial(crateMaterial);
+	auto floorMesh = Procedural::PlaneMesh();
+	auto floorTexture = std::make_shared<Texture>(TextureFromFile("marble.jpg", "resources/textures"), "texture_diffuse", "resources/textures");
+	floorMesh->AddTexture(floorTexture);
+	auto floorModel = std::make_shared<Model>(floorMesh);
+
+	std::vector<std::unique_ptr<Drawable>> crates;
+	for (int i = 0; i < 10; i++)
+	{
+		crates.push_back(std::make_unique<Drawable>(crateModel, std::make_shared<Transform>(vec3(2.0f * i, 1.0f, 2.0f * i), 0.0f, 0.0f, 0.0f, vec3(2.0f)), material));
+	}
+	Drawable floor(floorModel, std::make_shared<Transform>(vec3(0.0f), 0.0f, 0.0f, 0.0f, vec3(50.0f)), material);
 
 	while (engine.IsRunning())
 	{
 		engine.StartFrame();
 
-		g_physicsEngine->Update();
-		crate->Draw();
+		for (auto& crate : crates)
+		{
+			crate->Draw();
+		}
 
+		floor.Draw();
+
+		gui.RenderFrame();
 		engine.EndFrame();
 	}
 
-	g_physicsEngine->Shutdown();
 	g_objectsManager->Shutdown();
 }
