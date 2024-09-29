@@ -81,7 +81,8 @@ int main()
 	std::shared_ptr<RigidBody> rigidBody = std::make_shared<RigidBody>(0.0f, vec3(0.0f), sharedTransform);
 	std::shared_ptr<Collider> collider = std::make_shared<Collider>(mesh, sharedTransform);
 	rigidBody->AddCollider(collider);
-	auto blackBody = std::make_unique<PhysicsObject>(model, sharedTransform, rigidBody, perfectBlack);
+	auto blackBody = std::make_unique<PhysicsObject>(model, sharedTransform, rigidBody);
+	blackBody->AddMaterial(perfectBlack);
 
 	double t = 7000;
 	double b = 0.002897;

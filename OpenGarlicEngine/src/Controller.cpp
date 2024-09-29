@@ -42,11 +42,6 @@ void Controller::ProcessInput(GLFWwindow* window)
 				std::cerr << "Controller doesn't possess any objects" << std::endl;
 			}
 		}
-
-		// TODO: Make it do what it is suppposed to do
-		/*if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_PRESS)
-			m_Actions["shoot"]();*/
-		
 	}
 }
 

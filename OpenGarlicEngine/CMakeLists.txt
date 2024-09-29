@@ -1,7 +1,7 @@
 file(GLOB_RECURSE SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 file(GLOB_RECURSE HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h")
 
-add_library(${PROJECT_NAME} STATIC ${SOURCES} "src/Drawable.h")
+add_library(${PROJECT_NAME} STATIC ${SOURCES} "src/Drawable.h" "src/PostprocessEffect.h")
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 FetchContent_MakeAvailable(glfw glm imgui assimp)
@@ -16,7 +16,7 @@ add_library(imgui_glfw STATIC
 
   imgui/backends/imgui_impl_glfw.cpp
   imgui/backends/imgui_impl_opengl3.cpp
- "src/Drawable.h")
+ "src/Drawable.h" "src/PostprocessEffect.h")
 target_link_libraries(imgui_glfw PUBLIC glfw ${OPENGL_LIBRARIES})
 target_include_directories(imgui_glfw
 PUBLIC
@@ -25,7 +25,7 @@ PUBLIC
 )
 
 set(GLAD_SOURCES ${PROJECT_SOURCE_DIR}/external/glad/src/glad.c)
-add_library(glad STATIC ${GLAD_SOURCES} "src/Drawable.h")
+add_library(glad STATIC ${GLAD_SOURCES} "src/Drawable.h" "src/PostprocessEffect.h")
 target_include_directories(glad PUBLIC ${PROJECT_SOURCE_DIR}/external/glad/include)
 
 

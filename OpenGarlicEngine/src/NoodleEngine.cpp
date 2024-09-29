@@ -2,22 +2,16 @@
 
 NoodleEngine::NoodleEngine()
 	: m_Window(windowInit()),
-	m_Camera(std::make_shared<Camera>()),
-	m_postProcessShader(std::make_shared<Shader>("shaders/depth_buffer.vs", "shaders/depth_buffer.fs"))
+	m_Camera(std::make_shared<Camera>())
 {
 	m_Controller = std::make_shared<Controller>();
 	m_Controller->Possess(m_Camera->GetSharedTransform());
 	glfwSetWindowUserPointer(m_Window, m_Controller.get());
 
-	InitDepthBuffer();
+	AddPostprocessingEffect(std::make_shared<PostprocessEffect>(std::make_shared<Shader>("shaders/depth_buffer.vs", "shaders/depth_buffer.fs")));
+
+	InitFrameBuffer();
 	InitQuad();
-
-	m_postProcessShader->Use();
-	m_postProcessShader->SetInt("depthTexture", 0);
-
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 NoodleEngine::~NoodleEngine()
@@ -43,9 +37,14 @@ void NoodleEngine::EndFrame()
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glDisable(GL_DEPTH_TEST);
 
-	m_postProcessShader->Use();
+	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	m_postProcessEffect->Use();
+	m_postProcessEffect->SetShaderParameter("screenTexture", 0);
+
 	glBindVertexArray(m_quad);
-	glBindTexture(GL_TEXTURE_2D, m_colorBuffer);
+	glBindTexture(GL_TEXTURE_2D, m_colorbuffer);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 
 	glfwSwapBuffers(m_Window);
@@ -55,6 +54,11 @@ void NoodleEngine::EndFrame()
 bool NoodleEngine::IsRunning()
 {
 	return !glfwWindowShouldClose(m_Window);
+}
+
+void NoodleEngine::AddPostprocessingEffect(std::shared_ptr<PostprocessEffect> effect)
+{
+	m_postProcessEffect = effect;
 }
 
 void NoodleEngine::GenerateFrameData()
@@ -115,32 +119,33 @@ GLFWwindow* NoodleEngine::windowInit()
 	if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)))
 	{
 		std::cout << "Failed to initialize GLAD" << std::endl;
+		glfwTerminate();
+		return nullptr;
 	}
 
 	stbi_set_flip_vertically_on_load(false);
-	glEnable(GL_DEPTH_TEST);
 
 	return window;
 }
 
-void NoodleEngine::InitDepthBuffer()
+void NoodleEngine::InitFrameBuffer()
 {
 	glGenFramebuffers(1, &m_framebuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, m_framebuffer);
 
 	// Create a color attachment texture (for your rendered scene)
-	glGenTextures(1, &m_colorBuffer);
-	glBindTexture(GL_TEXTURE_2D, m_colorBuffer);
+	glGenTextures(1, &m_colorbuffer);
+	glBindTexture(GL_TEXTURE_2D, m_colorbuffer);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, SCR_WIDTH, SCR_HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_colorBuffer, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_colorbuffer, 0);
 
 	// Create a depth attachment texture
-	glGenRenderbuffers(1, &m_depthBuffer);
-	glBindRenderbuffer(GL_RENDERBUFFER, m_depthBuffer);
+	glGenRenderbuffers(1, &m_renderbuffer);
+	glBindRenderbuffer(GL_RENDERBUFFER, m_renderbuffer);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, SCR_WIDTH, SCR_HEIGHT); // use a single renderbuffer object for both a depth AND stencil buffer.
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_depthBuffer); // now actually attach it
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_renderbuffer); // now actually attach it
 	// now that we actually created the framebuffer and added all attachments we want to check if it is actually complete now
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
@@ -159,11 +164,11 @@ void NoodleEngine::InitQuad()
 		// positions   // texCoords
 		-1.0f,  1.0f,  0.0f, 1.0f,
 		-1.0f, -1.0f,  0.0f, 0.0f,
-			1.0f, -1.0f,  1.0f, 0.0f,
+		1.0f, -1.0f,  1.0f, 0.0f,
 
 		-1.0f,  1.0f,  0.0f, 1.0f,
-			1.0f, -1.0f,  1.0f, 0.0f,
-			1.0f,  1.0f,  1.0f, 1.0f
+		1.0f, -1.0f,  1.0f, 0.0f,
+		1.0f,  1.0f,  1.0f, 1.0f
 	};
 	// Setup plane VAO
 	glGenVertexArrays(1, &m_quad);

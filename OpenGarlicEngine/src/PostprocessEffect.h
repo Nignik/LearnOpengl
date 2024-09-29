@@ -1,29 +1,20 @@
 #pragma once
 
-#include <glm/glm.hpp>
+#include <memory>
 
 #include "Shader.h"
 
-using glm::vec3;
-using glm::mat4;
-
 template <class... T>
-constexpr bool always_false = false;
+constexpr bool always_falsee = false;
 
-class Material
+class PostprocessEffect
 {
 public:
-	Material(std::shared_ptr<Shader> shader)
+	PostprocessEffect(std::shared_ptr<Shader> shader)
 		: m_shader(shader)
-	{
-	}
+	{}
 
 	virtual void Use() {};
-
-	std::shared_ptr<Shader> GetShader()
-	{
-		return m_shader;
-	};
 
 	template <typename T>
 	void SetShaderParameter(std::string name, T value)
@@ -67,19 +58,10 @@ public:
 		}
 		else
 		{
-			static_assert(always_false<T>::value, "Unsupported type");
+			static_assert(always_falsee<T>::value, "Unsupported type");
 		}
 	}
 
-	void SetMVP(mat4 model, mat4 view, mat4 projection)
-	{
-		m_shader->Use();
-
-		m_shader->SetMat4("model", model);
-		m_shader->SetMat4("view", view);
-		m_shader->SetMat4("projection", projection);
-	}
-
-protected:
+private:
 	std::shared_ptr<Shader> m_shader;
 };

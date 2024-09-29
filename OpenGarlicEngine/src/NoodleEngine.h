@@ -1,8 +1,8 @@
 ﻿#pragma once
 
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
 
+#include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -18,6 +18,7 @@
 #include "stb_image.h"
 #include "Controller.h"
 #include "ObjectsManager.h"
+#include "PostprocessEffect.h"
 #include "FrameData.h"
 
 #include <imgui.h>
@@ -40,6 +41,8 @@ public:
 	void EndFrame();
 	bool IsRunning();
 
+	void AddPostprocessingEffect(std::shared_ptr<PostprocessEffect> effect);
+
 	void GenerateFrameData();
 	vec2 GetResolution();
 	GLFWwindow* GetWindow();
@@ -51,20 +54,20 @@ private:
 	GLFWwindow* m_Window;
 
 	GLuint m_framebuffer;
-	GLuint m_depthBuffer;
-	GLuint m_colorBuffer;
+	GLuint m_renderbuffer;
+	GLuint m_colorbuffer;
 	GLuint m_quad;
+
+	std::shared_ptr<PostprocessEffect> m_postProcessEffect;
 
 	std::shared_ptr<Camera> m_Camera;
 	std::shared_ptr<Controller> m_Controller;
-
-	std::shared_ptr<Shader> m_postProcessShader;
 
 	float m_DeltaTime = 0.0f;
 	float m_LastFrame = 0.0f;
 
 	GLFWwindow* windowInit();
-	void InitDepthBuffer();
+	void InitFrameBuffer();
 	static void frameBuffer_Size_Callback(GLFWwindow* window, int width, int height);
 
 	void InitQuad();

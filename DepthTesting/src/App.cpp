@@ -34,9 +34,17 @@ int main()
 	}
 	Drawable floor(floorModel, std::make_shared<Transform>(vec3(0.0f), 0.0f, 0.0f, 0.0f, vec3(50.0f)), material);
 
+	/*auto crateMesh = Procedural::CubeMesh();
+	auto crateTexture = std::make_shared<Texture>(TextureFromFile("bricks2_disp.jpg", "resources/textures"), "texture_diffuse", "resources/textures");
+	crateMesh->AddTexture(crateTexture);
+	auto crateModel = std::make_shared<Model>(crateMesh);
+	auto crate = std::make_unique<Drawable>(crateModel, std::make_shared<Transform>(vec3(2.0f, 1.0f, 2.0f), 0.0f, 0.0f, 0.0f, vec3(2.0f)), material);*/
+
 	while (engine.IsRunning())
 	{
 		engine.StartFrame();
+
+		//crate->Draw();
 
 		for (auto& crate : crates)
 		{

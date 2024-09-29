@@ -1,15 +1,12 @@
 #version 330 core
 out vec4 FragColor;
 
-uniform sampler2D depthTexture;
-
 in vec2 TexCoords;
+
+uniform sampler2D depthTexture;
 
 void main()
 {
-    // Get depth value from depth buffer
-    float depthValue = texture(depthTexture, TexCoords).r;
-    
-    // Visualize depth as grayscale
-    FragColor = vec4(vec3(depthValue), 1.0);
-}
+    vec3 col = texture(depthTexture, TexCoords).rgb;
+    FragColor = vec4(col, 1.0);
+} 
