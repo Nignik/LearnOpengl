@@ -40,6 +40,10 @@ public:
 
 	void AddTexture(std::shared_ptr<Texture> newTexture);
 
+	// Only temporarly need, to get instanced rendering to work
+	GLuint GetVAO();
+	size_t GetIndicesSize();
+
 private:
 	GLuint m_VAO, m_VBO, m_EBO;
 	std::vector<Vertex> m_Vertices;

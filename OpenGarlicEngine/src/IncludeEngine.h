@@ -22,3 +22,4 @@
 #include "PhysicsObject.h"
 #include "Procedural/ProceduralMesh.h"
 #include "Drawable.h"
+#include "InstancedMesh.h"

@@ -4,7 +4,6 @@
 
 #include <glm/gtc/random.hpp>
 
-#include <Utils.h>
 #include <numeric>
 
 extern Global::ObjectsManager* g_objectsManager;
@@ -49,28 +48,22 @@ int main()
 		hashes[i] = (int)(std::modf(i * 0.381f, &temp) * 256.0f);
 	}
 	auto material = std::make_shared<HashMaterial>(std::make_shared<Shader>("shaders/hash.vs", "shaders/hash.fs"));
+	
+	std::vector<std::shared_ptr<Transform>> transforms;
+	transforms.reserve(10);
+	for (int i = 0; i < 10; i++)
+	{
+		transforms.push_back(std::make_shared<Transform>(vec3(2.0f * i, 1.0f, 2.0f * i), 0.0f, 0.0f, 0.0f, vec3(2.0f)));
+	}
 
 	auto mesh = Procedural::CubeMesh();
-	auto model = std::make_shared<Model>(mesh);
-	std::vector<Drawable> cubes;
-	cubes.reserve(RES.x * RES.y);
-	for (int i = 0; i < RES.x; i++)
-	{
-		for (int j = 0; j < RES.y; j++)
-		{
-			cubes.emplace_back(model, std::make_shared<Transform>(vec3(1.0f * i, 1.0f, 1.0f * j), 0.0f, 0.0f, 0.0f, vec3(1.0f)), material);
-		}
-	}
+	InstancedMesh iMesh(mesh, material, transforms);
 
 	while (engine.IsRunning())
 	{
 		engine.StartFrame();
 
-		for (size_t i = 0; i < cubes.size(); i++)
-		{
-			material->SetHash((1.0f / 255.0f) * (hashes[i] & 255));
-			cubes[i].Draw();
-		}
+		iMesh.Draw();
 
 		gui.RenderFrame();
 		engine.EndFrame();

@@ -26,6 +26,8 @@ namespace Global
 
 		uint32_t m_CurrentObjectId = 1;
 		uint32_t m_CurrentHandleIdx = 1;
+
+		//std::map<int, std::shared_ptr<Drawable>> m_drawables;
 	};
 }
 

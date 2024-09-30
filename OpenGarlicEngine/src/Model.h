@@ -2,6 +2,7 @@
 
 #include <glad/glad.h>
 #include <glm/glm.hpp>
+
 #include "stb_image.h"
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -21,8 +22,6 @@ public:
 	Model(std::string const& path, bool gamma = false);
 	Model(std::shared_ptr<Mesh> mesh);
 	void Draw(std::shared_ptr<Shader> shader);
-
-	void AddMesh(std::shared_ptr<Mesh> mesh);
 
 private:
 	std::vector<std::shared_ptr<Texture>> m_Textures_loaded;

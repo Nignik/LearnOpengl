@@ -49,6 +49,16 @@ void Mesh::AddTexture(std::shared_ptr<Texture> newTexture)
 	m_Textures.push_back(newTexture);
 }
 
+GLuint Mesh::GetVAO()
+{
+	return m_VAO;
+}
+
+size_t Mesh::GetIndicesSize()
+{
+	return m_Indices.size();
+}
+
 void Mesh::GenerateMesh()
 {
 	glGenVertexArrays(1, &m_VAO);
