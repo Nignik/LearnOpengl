@@ -17,6 +17,11 @@ void Model::Draw(std::shared_ptr<Shader> shader)
 		mesh->Draw(shader);
 }
 
+void Model::AddMesh(std::shared_ptr<Mesh> mesh)
+{
+	m_Meshes.push_back(mesh);
+}
+
 void Model::m_LoadModel(std::string const& path)
 {
 	Assimp::Importer importer;

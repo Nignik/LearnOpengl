@@ -67,11 +67,22 @@ void NoodleEngine::GenerateFrameData()
 
 	float currentTime = static_cast<float>(glfwGetTime());
 	frameData.deltaTime = currentTime - m_LastFrame;
+	frameData.timeAcc += frameData.deltaTime;
 	m_LastFrame = currentTime;
 
 	frameData.projection = glm::perspective(glm::radians(m_Camera->GetZoom()), static_cast<float>(SCR_WIDTH) / static_cast<float>(SCR_HEIGHT), 0.1f, 1000.0f);
 	frameData.view = m_Camera->GetViewMatrix();
 	frameData.position = m_Camera->GetPosition();
+
+	frameData.frameCount++;
+	if (frameData.timeAcc >= 1.0f)
+	{
+		frameData.fps = frameData.frameCount;
+		frameData.frameCount = 0.0f;
+		frameData.timeAcc = 0.0f;
+
+		std::cout << frameData.fps << std::endl;
+	}
 }
 
 vec2 NoodleEngine::GetResolution()

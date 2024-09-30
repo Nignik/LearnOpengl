@@ -22,6 +22,8 @@ public:
 	Model(std::shared_ptr<Mesh> mesh);
 	void Draw(std::shared_ptr<Shader> shader);
 
+	void AddMesh(std::shared_ptr<Mesh> mesh);
+
 private:
 	std::vector<std::shared_ptr<Texture>> m_Textures_loaded;
 	std::vector<std::shared_ptr<Mesh>> m_Meshes;
