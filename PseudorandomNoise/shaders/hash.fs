@@ -1,9 +1,9 @@
-#version 330 core
+#version 450 core
 
-//uniform float hash;
+flat in uint hash;
 
 out vec4 FragColor;
 
 void main() {
-    FragColor = vec4(vec3(1.0), 1.0);
+    FragColor = vec4(vec3(1.0) * (hash / 256.0), 1.0);
 }

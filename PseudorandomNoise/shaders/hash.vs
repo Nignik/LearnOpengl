@@ -1,11 +1,19 @@
-#version 330 core
+#version 450 core
 
 layout (location = 0) in vec3 aPos;
+layout (location = 7) in mat4 transform;
 
-uniform mat4 transforms[10];
+layout(std430, binding = 0) buffer HashBuffer
+{
+    uint hashes[];
+};
+
 uniform mat4 view;
 uniform mat4 projection;
 
+flat out uint hash;
+
 void main() {
-    gl_Position = projection * view * transforms[gl_InstanceID] * vec4(aPos, 1.0);
+    hash = hashes[gl_InstanceID];
+    gl_Position = projection * view * transform * vec4(aPos, 1.0);
 }

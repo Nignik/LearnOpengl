@@ -8,13 +8,20 @@
 class InstancedMesh
 {
 public:
-	InstancedMesh(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> material, std::vector<std::shared_ptr<Transform>>& translations);
+	InstancedMesh(std::shared_ptr<Mesh> mesh, Material material, std::vector<glm::mat4>& transforms, std::vector<int>& hashes, int amount);
 
 	void Draw();
 
 private:
+	GLuint m_vbo, m_ssbo;
 	std::shared_ptr<Mesh> m_mesh;
-	std::shared_ptr<Material> m_material;
+	std::vector<glm::mat4> m_transforms;
 
-	std::vector<std::shared_ptr<Transform>> m_transforms;
+	Material m_material;
+
+	int m_amount = 0;
+
+	std::vector<int> m_hashes;
+	
+	void GenerateMesh();
 };
