@@ -7,6 +7,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <cctype>
 
 using glm::vec2, glm::vec3, glm::vec4;
 using glm::mat2, glm::mat3, glm::mat4;
@@ -23,6 +24,7 @@ public:
 
 	void SetBool(const std::string& name, bool value) const;
 	void SetInt(const std::string& name, int value) const;
+	void SetUint(const std::string& name, uint32_t value) const;
 	void SetFloat(const std::string& name, float value) const;
 
 	void SetVec2(const std::string& name, const vec2& value) const;

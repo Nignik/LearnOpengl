@@ -8,20 +8,29 @@
 class InstancedMesh
 {
 public:
-	InstancedMesh(std::shared_ptr<Mesh> mesh, Material material, std::vector<glm::mat4>& transforms, std::vector<int>& hashes, int amount);
+	InstancedMesh(std::shared_ptr<Mesh> mesh, Material material, int amount);
 
 	void Draw();
 
+	template<typename T>
+	void AddSsbo(std::vector<T> vec)
+	{
+		GLuint ssbo;
+		glGenBuffers(1, &ssbo);
+		glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
+		glBufferData(GL_SHADER_STORAGE_BUFFER, vec.size() * sizeof(T), vec.data(), GL_STATIC_DRAW);
+		glBindBufferBase(GL_SHADER_STORAGE_BUFFER, (GLuint)m_ssbos.size(), ssbo);
+		glBindBuffer(GL_SHADER_STORAGE_BUFFER, (GLuint)m_ssbos.size());
+
+		m_ssbos.push_back(ssbo);
+	}
+
 private:
-	GLuint m_vbo, m_ssbo;
 	std::shared_ptr<Mesh> m_mesh;
-	std::vector<glm::mat4> m_transforms;
 
 	Material m_material;
 
 	int m_amount = 0;
 
-	std::vector<int> m_hashes;
-	
-	void GenerateMesh();
+	std::vector<GLuint> m_ssbos;
 };
