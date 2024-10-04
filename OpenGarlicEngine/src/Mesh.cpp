@@ -9,6 +9,13 @@ Mesh::Mesh(std::vector<Vertex>& vertices, std::vector<unsigned int>& indices, st
 	GenerateMesh();
 }
 
+Mesh::~Mesh()
+{
+	glDeleteVertexArrays(1, &m_VAO);
+	glDeleteBuffers(1, &m_VBO);
+	glDeleteBuffers(1, &m_EBO);
+}
+
 void Mesh::Draw(std::shared_ptr<Shader> shader)
 {
 	shader->Use();

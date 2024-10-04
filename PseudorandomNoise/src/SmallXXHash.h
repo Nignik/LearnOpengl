@@ -1,6 +1,7 @@
 #pragma once
 
-#include <cctype>
+#include <cstddef>
+#include <bit>
 
 struct SmallXXHash
 {
@@ -14,10 +15,33 @@ struct SmallXXHash
 
 	SmallXXHash() : accumulator(0) {}
 	SmallXXHash(uint32_t seed) : accumulator(seed + primeE) {}
-	
-	void Eat(uint32_t data)
+
+	void Seed(uint32_t seed)
 	{
-		accumulator += data * primeC;
+		accumulator = seed + primeE;
+	}
+	
+	SmallXXHash& Eat(uint32_t data)
+	{
+		accumulator = std::rotl(accumulator + data * primeC, 17) * primeD;
+		return *this;
+	}
+
+	SmallXXHash& Eat(uint8_t data)
+	{
+		accumulator = std::rotl(accumulator + data * primeE, 11) * primeA;
+		return *this;
+	}
+
+	operator uint32_t() const
+	{
+		uint32_t avalanche = accumulator;
+		avalanche ^= avalanche >> 15;
+		avalanche *= primeB;
+		avalanche ^= avalanche >> 13;
+		avalanche *= primeC;
+		avalanche ^= avalanche >> 16;
+		return avalanche;
 	}
 
 	SmallXXHash operator+(const SmallXXHash& other) const
@@ -50,10 +74,5 @@ struct SmallXXHash
 	{
 		this->accumulator -= other.accumulator;
 		return *this;
-	}
-
-	operator uint32_t() const
-	{
-		return accumulator;
 	}
 };

@@ -12,6 +12,11 @@ InstancedMesh::InstancedMesh(std::shared_ptr<Mesh> mesh, Material material, int 
 {
 }
 
+InstancedMesh::~InstancedMesh()
+{
+	DeleteSsbos();
+}
+
 void InstancedMesh::Draw()
 {
 	auto& frameData = Global::FrameData::GetInstance();
@@ -27,4 +32,13 @@ void InstancedMesh::Draw()
 	glBindVertexArray(m_mesh->GetVAO());
 	glDrawElementsInstanced(GL_TRIANGLES, m_mesh->GetIndicesSize(), GL_UNSIGNED_INT, 0, m_amount);
 	glBindVertexArray(0);
+}
+
+void InstancedMesh::DeleteSsbos()
+{
+	if (!m_ssbos.empty())
+	{
+		glDeleteBuffers(static_cast<GLsizei>(m_ssbos.size()), m_ssbos.data());
+		m_ssbos.clear();
+	}
 }

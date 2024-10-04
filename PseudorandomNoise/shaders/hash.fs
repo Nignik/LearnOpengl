@@ -5,5 +5,10 @@ flat in uint hash;
 out vec4 FragColor;
 
 void main() {
-    FragColor = vec4(vec3(1.0) * (1.0 / 255.0) * (hash & 255), 1.0);
+    vec3 hashColor = (1.0 / 255.0) * vec3(
+        hash & 255,
+        (hash >> 8) & 255,
+        (hash >> 16) & 255);
+
+    FragColor = vec4(hashColor, 1.0);
 }

@@ -10,7 +10,7 @@
 #include "Mesh.h"
 #include "Model.h"
 #include "NoodleEngine.h"
-#include "NoodleGui.h"
+#include "Gui/NoodleGui.h"
 #include "Shader.h"
 #include "shapes.h"
 #include "Controller.h"

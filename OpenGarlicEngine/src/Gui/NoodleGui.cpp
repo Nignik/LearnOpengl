@@ -5,7 +5,7 @@ NoodleGui::NoodleGui(GLFWwindow* window)
 {
 	ImGui::CreateContext();
 	ImGui_ImplGlfw_InitForOpenGL(window, true);
-	ImGui_ImplOpenGL3_Init("#version 130");
+	ImGui_ImplOpenGL3_Init("#version 450");
 }
 
 NoodleGui::~NoodleGui()
@@ -21,7 +21,7 @@ void NoodleGui::RenderFrame()
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
 
-	for (auto& button : buttons)
+	for (auto& button : m_buttons)
 	{
 		if (ImGui::Button((button.label).c_str()))
 		{
@@ -29,12 +29,9 @@ void NoodleGui::RenderFrame()
 		}
 	}
 
-	for (auto& slider : sliders)
+	for (auto& slider : m_sliders)
 	{
-		if (ImGui::SliderFloat((slider.label).c_str(), &slider.value, slider.minValue, slider.maxValue))
-		{
-			slider.func(slider.value);
-		}
+		slider->Render();
 	}
 
 	ImGui::Render();
@@ -45,27 +42,23 @@ void NoodleGui::ShowControllerSettings(std::weak_ptr<Controller> controller)
 {
 	if (auto locked = controller.lock())
 	{
-		FloatSlider new_slider("movement speed", [locked](float new_speed) {locked->SetMovementSpeed(new_speed); }, 100.0f, 0.1f, 300.0f);
-		AddSlider(std::move(new_slider));
+		auto new_slider = std::make_shared<TypedSlider<float>>("movement speed", [locked](float new_speed) {locked->SetMovementSpeed(new_speed);}, 100.0f, 0.1f, 300.0f);
+
+		AddSlider(new_slider);
 	}
 	else
 	{
 		std::cerr << "Controller doesn't possess any objects" << std::endl;
 	}
-	
 }
 
 void NoodleGui::AddButton(Butt&& newButton)
 {
-	buttons.push_back(std::move(newButton));
+	m_buttons.push_back(std::move(newButton));
 }
 
-void NoodleGui::AddSlider(FloatSlider&& newSlider)
+void NoodleGui::AddSlider(std::shared_ptr<Slider> newSlider)
 {
-	sliders.push_back(newSlider);
-	FloatSlider& currentSlider = sliders.back();
-	currentSlider.func(currentSlider.value);
+	m_sliders.push_back(newSlider);
 }
-
-
 

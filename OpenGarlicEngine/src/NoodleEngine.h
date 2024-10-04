@@ -14,7 +14,7 @@
 #include "Camera/CameraController.h"
 #include "InputHandler.h"
 #include "Line.h"
-#include "NoodleGui.h"
+#include "Gui/NoodleGui.h"
 #include "stb_image.h"
 #include "Controller.h"
 #include "ObjectsManager.h"

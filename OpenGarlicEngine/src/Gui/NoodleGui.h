@@ -10,24 +10,17 @@
 
 #include "Camera/Camera.h"
 #include "Controller.h"
+#include "Slider.h"
 
 #include <vector>
 #include <string>
 #include <functional>
+#include <variant>
 
 struct Butt
 {
 	std::string label;
 	std::function<void()> func;
-};
-
-struct FloatSlider
-{
-	std::string label;
-	std::function<void(float)> func;
-	float value;
-	float minValue;
-	float maxValue;
 };
 
 class NoodleGui
@@ -39,10 +32,10 @@ public:
 	void RenderFrame();
 	void ShowControllerSettings(std::weak_ptr<Controller> controller);
 	void AddButton(Butt&& newButton);
-
-	void AddSlider(FloatSlider&& newSlider);
+	
+	void AddSlider(std::shared_ptr<Slider> newSlider);
 
 private:
-	std::vector<Butt> buttons;
-	std::vector<FloatSlider> sliders;
+	std::vector<Butt> m_buttons;
+	std::vector<std::shared_ptr<Slider>> m_sliders;
 };

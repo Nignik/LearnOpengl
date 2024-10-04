@@ -16,6 +16,9 @@ NoodleEngine::NoodleEngine()
 
 NoodleEngine::~NoodleEngine()
 {
+	glDeleteBuffers(1, &m_renderbuffer);
+	glDeleteBuffers(1, &m_colorbuffer);
+	glDeleteBuffers(1, &m_framebuffer);
 	glfwTerminate();
 }
 
