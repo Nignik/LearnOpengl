@@ -14,8 +14,9 @@ class Transform
 {
 public:
 	Transform(vec3 position, float pitch, float yaw, float roll, vec3 scale);
+	Transform();
 
-	void RotateByOffset(vec2 delta, float speed);
+	void Rotate(vec3 rotation);
 
 	mat4 GetTransformMatrix();
 	vec3 GetPosition();
@@ -26,9 +27,10 @@ public:
 	quat GetOrientation();
 
 	void SetPosition(vec3 newPosition);
+	void SetScale(vec3 scale);
 
 private:
-	vec3 m_Position;
-	float m_Pitch, m_Yaw, m_Roll;
-	vec3 m_Scale;
+	vec3 m_position{};
+	float m_pitch, m_yaw, m_roll;
+	vec3 m_scale{};
 };

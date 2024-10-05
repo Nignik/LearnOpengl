@@ -8,34 +8,14 @@
 class InstancedMesh
 {
 public:
-	InstancedMesh(std::shared_ptr<Mesh> mesh, Material material, int amount);
+	InstancedMesh(std::shared_ptr<Mesh> mesh, std::shared_ptr<Material> material, int amount);
 	~InstancedMesh();
 
 	InstancedMesh(const InstancedMesh&) = delete;
 	InstancedMesh& operator=(const InstancedMesh&) = delete;
 
-	InstancedMesh(InstancedMesh&& other) noexcept
-		: m_mesh(std::move(other.m_mesh)),
-		m_material(std::move(other.m_material)),
-		m_amount(other.m_amount),
-		m_ssbos(std::move(other.m_ssbos))
-	{
-		other.m_amount = 0;
-	}
-
-	InstancedMesh& operator=(InstancedMesh&& other) noexcept
-	{
-		if (this != &other)
-		{
-			DeleteSsbos();
-			m_mesh = std::move(other.m_mesh);
-			m_material = std::move(other.m_material);
-			m_amount = other.m_amount;
-			m_ssbos = std::move(other.m_ssbos);
-			other.m_amount = 0;
-		}
-		return *this;
-	}
+	InstancedMesh(InstancedMesh&& other) noexcept;
+	InstancedMesh& operator=(InstancedMesh&& other) noexcept;
 
 	void Draw();
 
@@ -56,10 +36,9 @@ public:
 
 private:
 	std::shared_ptr<Mesh> m_mesh;
-
-	Material m_material;
+	std::shared_ptr<Material> m_material;
 
 	int m_amount = 0;
 
-	std::vector<GLuint> m_ssbos;
+	std::vector<GLuint> m_ssbos{};
 };

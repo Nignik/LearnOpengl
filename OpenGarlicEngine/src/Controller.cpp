@@ -72,7 +72,7 @@ void Controller::OnMouseMove(double xPosIn, double yPosIn)
 	{
 		if (auto locked = possession.lock())
 		{
-			locked->RotateByOffset({ xOffset, yOffset }, m_MouseSensitivity);
+			locked->Rotate(vec3{ xOffset, yOffset, 0.0f } * m_MouseSensitivity);
 		}
 		else
 		{

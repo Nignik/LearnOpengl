@@ -5,51 +5,11 @@
 
 #include <glm/gtc/random.hpp>
 
-#include "SmallXXHash.h"
+#include "Scene.h"
 
 extern Global::ObjectsManager* g_objectsManager;
 
-static std::unique_ptr<InstancedMesh> GenerateInstancedMesh(int res, int seed, float verticalOffset, Material& material) 
-{
-	float invRes = 1.0f / res;
-	int amount = res * res;
-
-	std::vector<SmallXXHash> hashes;
-	hashes.reserve(amount);
-	for (int i = 0; i < amount; i++)
-	{
-		uint32_t v = (int)(invRes * i + 0.00001);
-		uint32_t u = i - res * v;
-
-		hashes.push_back(SmallXXHash(seed).Eat(u).Eat(v));
-	}
-
-	std::vector<glm::mat4> transforms;
-	transforms.reserve(amount);
-	for (int i = 0; i < res; i++)
-	{
-		for (int j = 0; j < res; j++)
-		{
-			float yOffset = ((1.0 / 255.0) * (hashes[i * res + j] >> 24) - 0.5) * verticalOffset;
-			Transform t(vec3(1.0f * i, yOffset, 1.0f * j), 0.0f, 0.0f, 0.0f, vec3(1.0f));
-			transforms.push_back(t.GetTransformMatrix());
-		}
-	}
-
-	auto mesh = Procedural::CubeMesh();
-	auto iMesh = std::make_unique<InstancedMesh>(mesh, material, amount);
-	iMesh->AddSsbo(transforms);
-
-	std::vector<uint32_t> h;
-	h.reserve(hashes.size());
-	for (auto& hash : hashes)
-	{
-		h.push_back(hash);
-	}
-	iMesh->AddSsbo(h);
-
-	return iMesh;
-}
+void initializeGui(NoodleGui& gui, Scene& scene);
 
 int main()
 {
@@ -60,39 +20,92 @@ int main()
 
 	g_objectsManager->Init();
 
-	auto hashShader = std::make_shared<Shader>("shaders/hash.vs", "shaders/hash.fs");
-	Material material(hashShader);
-
-	int res = 32;
-	int seed = 0;
-	float verticalOffset = 0.0f;
-
-	auto iMesh = GenerateInstancedMesh(res, seed, verticalOffset, material);
-
-	gui.AddSlider(std::make_shared<TypedSlider<int>>("Resolution", [&](int newRes) {
-		res = newRes;
-		iMesh = GenerateInstancedMesh(res, seed, verticalOffset, material);
-		}, res, 0, 64));
-
-	gui.AddSlider(std::make_shared<TypedSlider<int>>("Seed", [&](int newSeed) {
-		seed = newSeed;
-		iMesh = GenerateInstancedMesh(res, seed, verticalOffset, material);
-		}, seed, 0, 64));
-
-	gui.AddSlider(std::make_shared<TypedSlider<float>>("Vertical Offset", [&](float newOffset) {
-		verticalOffset = newOffset;
-		iMesh = GenerateInstancedMesh(res, seed, verticalOffset, material);
-		}, verticalOffset, 0.0f, 3.0f));
+	Scene scene;
+	initializeGui(gui, scene);
 
 	while (engine.IsRunning())
 	{
 		engine.StartFrame();
 
-		iMesh->Draw();
+		scene.Render();
 
 		gui.RenderFrame();
 		engine.EndFrame();
 	}
 
 	g_objectsManager->Shutdown();
+}
+
+void initializeGui(NoodleGui& gui, Scene& scene)
+{
+	gui.AddSlider(std::make_shared<TypedSlider<int>>("Resolution", std::bind(&Scene::SetRes, &scene, std::placeholders::_1), scene.GetRes(), 0, 64));
+	gui.AddSlider(std::make_shared<TypedSlider<int>>("Seed", std::bind(&Scene::SetSeed, &scene, std::placeholders::_1), scene.GetSeed(), 0, 64));
+	gui.AddSlider(std::make_shared<TypedSlider<float>>("Vertical Offset", std::bind(&Scene::SetVerticalOffset, &scene, std::placeholders::_1), scene.GetVerticalOffset(), 0.0f, 3.0f));
+	
+	gui.AddSlider(std::make_shared<TypedSlider<float>>("Translation x", [&scene](float position) {
+		auto trs = scene.GetDomainTrs();
+		auto pos = trs->GetPosition();
+		pos.x = position;
+		trs->SetPosition(pos);
+		scene.GenerateMesh();
+		},
+		0.0f, 0.0f, 100.0f));
+	gui.AddSlider(std::make_shared<TypedSlider<float>>("Translation y", [&scene](float position) {
+		auto trs = scene.GetDomainTrs();
+		auto pos = trs->GetPosition();
+		pos.y = position;
+		trs->SetPosition(pos);
+		scene.GenerateMesh();
+		},
+		0.0f, 0.0f, 100.0f));
+	gui.AddSlider(std::make_shared<TypedSlider<float>>("Translation z", [&scene](float position) {
+		auto trs = scene.GetDomainTrs();
+		auto pos = trs->GetPosition();
+		pos.z = position;
+		trs->SetPosition(pos);
+		scene.GenerateMesh();
+		},
+		0.0f, 0.0f, 100.0f));
+
+	gui.AddSlider(std::make_shared<TypedSlider<float>>("Pitch", [&scene](float rotation) {
+			auto trs = scene.GetDomainTrs();
+			trs->Rotate({ rotation, 0.0f,  0.0f });
+			scene.GenerateMesh();
+		},
+		0.0f, 0.0f, 90.0f));
+	gui.AddSlider(std::make_shared<TypedSlider<float>>("Yaw", [&scene](float rotation) {
+		auto trs = scene.GetDomainTrs();
+		trs->Rotate({ 0.0f, rotation, 0.0f });
+		scene.GenerateMesh();
+		}, 0.0f, 0.0f, 90.0f));
+	gui.AddSlider(std::make_shared<TypedSlider<float>>("Roll", [&scene](float rotation) {
+		auto trs = scene.GetDomainTrs();
+		trs->Rotate({ 0.0f, 0.0f, rotation });
+		scene.GenerateMesh();
+		}, 0.0f, 0.0f, 90.0f));
+
+	gui.AddSlider(std::make_shared<TypedSlider<int>>("Scale x", [&scene](int scale) {
+		auto trs = scene.GetDomainTrs();
+		auto scl = trs->GetScale();
+		scl.x = scale;
+		trs->SetScale(scl);
+		scene.GenerateMesh();
+		},
+		1, 1, 128));
+	gui.AddSlider(std::make_shared<TypedSlider<int>>("Scale y", [&scene](int scale) {
+		auto trs = scene.GetDomainTrs();
+		auto scl = trs->GetScale();
+		scl.y = scale;
+		trs->SetScale(scl);
+		scene.GenerateMesh();
+		},
+		1, 1, 128));
+	gui.AddSlider(std::make_shared<TypedSlider<int>>("Scale z", [&scene](int scale) {
+		auto trs = scene.GetDomainTrs();
+		auto scl = trs->GetScale();
+		scl.z = scale;
+		trs->SetScale(scl);
+		scene.GenerateMesh();
+		},
+		1, 1, 128));
 }

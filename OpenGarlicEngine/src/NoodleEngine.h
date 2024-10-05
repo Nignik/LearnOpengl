@@ -52,6 +52,7 @@ public:
 
 private:
 	GLFWwindow* m_Window;
+	std::shared_ptr<Controller> m_Controller;
 
 	GLuint m_framebuffer;
 	GLuint m_renderbuffer;
@@ -61,7 +62,6 @@ private:
 	std::shared_ptr<PostprocessEffect> m_postProcessEffect;
 
 	std::shared_ptr<Camera> m_Camera;
-	std::shared_ptr<Controller> m_Controller;
 
 	float m_DeltaTime = 0.0f;
 	float m_LastFrame = 0.0f;
