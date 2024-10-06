@@ -76,6 +76,24 @@ std::shared_ptr<Transform> Scene::GetDomainTrs()
 	return m_domainTrs;
 }
 
+void Scene::SetDomainPosition(glm::vec3 position)
+{
+	m_domainTrs->SetPosition(position);
+	GenerateMesh();
+}
+
+void Scene::SetDomainRotation(glm::vec3 rotation)
+{
+	m_domainTrs->Rotate(rotation);
+	GenerateMesh();
+}
+
+void Scene::SetDomainScale(glm::ivec3 scale)
+{
+	m_domainTrs->SetScale(scale);
+	GenerateMesh();
+}
+
 void Scene::ComputeHashes()
 {
 	m_hashes.clear();

@@ -51,8 +51,8 @@ public:
 	
 
 private:
-	GLFWwindow* m_Window;
 	std::shared_ptr<Controller> m_Controller;
+	GLFWwindow* m_Window;
 
 	GLuint m_framebuffer;
 	GLuint m_renderbuffer;

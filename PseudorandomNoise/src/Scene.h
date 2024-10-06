@@ -22,6 +22,9 @@ public:
 	float GetVerticalOffset() const;
 	void SetVerticalOffset(float offset);
 	std::shared_ptr<Transform> GetDomainTrs();
+	void SetDomainPosition(glm::vec3 position);
+	void SetDomainRotation(glm::vec3 rotation);
+	void SetDomainScale(glm::ivec3 scale);
 
 private:
 	std::shared_ptr<Shader> m_hashShader;
